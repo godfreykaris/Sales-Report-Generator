@@ -1,0 +1,58 @@
+# Ignore Visual Studio folders and files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore build output except .exe files
+x64/
+x86/
+*.obj
+*.pdb
+*.ilk
+*.log
+*.tlog
+*.idb
+*.ipch
+*.iobj
+*.ipdb
+
+# Ignore CMake or build system folders
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Ignore backup or temp files
+*.tmp
+*.bak
+*.swp
+*.swn
+*~
+
+# Ignore database and indexing files
+*.db
+*.VC.db
+*.sqlite
+*.vsidx
+
+# Allow .exe, .tlh, and .tli files explicitly
+!*.exe
+!*.tlh
+!*.tli
+
+# Ignore shortcut files
+*.lnk
+
+# Android/Gradle specific
+.gradle/
+*.iml
+build/
+
+
+# Ignore compiled Java classes
+*.class
+
+# Ignore Android .idea config
+.idea/
