@@ -613,14 +613,16 @@ int AdminUi::AddQuantityWindow::create_add_quantity_window(std::string &quantity
 
 			mset_brands(this->brands_array);
 
-			//free before reallocating
-			delete[]  this->p_brands;
-			this->p_brands = NULL;
+			// Reallocate this->p_brands with new size
+			this->p_brands = std::make_unique<char[]>(this->brands.size() + 1);
 
-			//we are reallocating to make sure the size of this buffer is enough to hold the new string
-			this->p_brands = new char[this->brands.size() + 1];
-			memset(this->p_brands, 0, this->brands.size());
-			strncpy_s(this->p_brands, this->brands.size() + 1, this->brands.c_str(), this->brands.size());
+			// Clear the memory
+			std::fill(this->p_brands.get(), this->p_brands.get() + this->brands.size(), 0);
+
+			// Copy the string
+			std::strncpy(this->p_brands.get(), this->brands.c_str(), this->brands.size() + 1);
+
+			// Call prepare_items_pointer
 			this->prepare_items_pointer(this->brands, '_', this->p_brands);
 		}
 		
@@ -1092,14 +1094,16 @@ int AdminUi::RemoveBrandWindow::create_remove_brand_window()
 		this->brands = "Select_";
 	}
 
-	//free before reallocating
-	delete[]  this->p_brands;
-	this->p_brands = NULL;
+	// Reallocate this->p_brands with new size
+	this->p_brands = std::make_unique<char[]>(this->brands.size() + 1);
 
-	//we are reallocating to make sure the size of this buffer is enough to hold the new string
-	this->p_brands = new char[this->brands.size() + 1];
-	memset(this->p_brands, 0, this->brands.size());
-	strncpy_s(this->p_brands, this->brands.size() + 1, this->brands.c_str(), this->brands.size());
+	// Clear the memory
+	std::fill(this->p_brands.get(), this->p_brands.get() + this->brands.size(), 0);
+
+	// Copy the string
+	std::strncpy(this->p_brands.get(), this->brands.c_str(), this->brands.size() + 1);
+
+	// Call prepare_items_pointer
 	this->prepare_items_pointer(this->brands, '_', this->p_brands);
 
 	ImGui::SameLine(60.0, 0.0);
@@ -1198,14 +1202,16 @@ int AdminUi::RemoveQuantityWindow::create_remove_quantity_window()
 		this->quantities = "Select_";
 	}
 
-	//free before reallocating
-	delete[]  this->p_brands;
-	this->p_brands = NULL;
+	// Reallocate this->p_brands with new size
+	this->p_brands = std::make_unique<char[]>(this->brands.size() + 1);
 
-	//we are reallocating to make sure the size of this buffer is enough to hold the new string
-	this->p_brands = new char[this->brands.size() + 1];
-	memset(this->p_brands, 0, this->brands.size());
-	strncpy_s(this->p_brands, this->brands.size() + 1, this->brands.c_str(), this->brands.size());
+	// Clear the memory
+	std::fill(this->p_brands.get(), this->p_brands.get() + this->brands.size(), 0);
+
+	// Copy the string
+	std::strncpy(this->p_brands.get(), this->brands.c_str(), this->brands.size() + 1);
+
+	// Call prepare_items_pointer
 	this->prepare_items_pointer(this->brands, '_', this->p_brands);
 
 	ImVec2 combo_size = ImVec2(230, 50);
@@ -1213,13 +1219,16 @@ int AdminUi::RemoveQuantityWindow::create_remove_quantity_window()
 	ImGui::SameLine(60.0, 0.0);
 	create_combo(this->p_brands, "Brand", this->r_quantity_brand_current_item, combo_size);
 	
-	delete[] this->p_quantities;
-	this->p_quantities = NULL;
+	// Reallocate this->p_quantities with new size
+	this->p_quantities = std::make_unique<char[]>(this->quantities.size() + 1);
 
-	//we are reallocating to make sure the size of this buffer is enough to hold the current string
-	this->p_quantities = new char[this->quantities.size() + 1];
-	memset(this->p_quantities, 0, this->quantities.size());
-	strncpy_s(this->p_quantities, this->quantities.size() + 1, this->quantities.c_str(), this->quantities.size());
+	// Clear the memory
+	std::fill(this->p_quantities.get(), this->p_quantities.get() + this->quantities.size(), 0);
+
+	// Copy the string
+	std::strncpy(this->p_quantities.get(), this->quantities.c_str(), this->quantities.size() + 1);
+
+	// Call prepare_items_pointer
 	this->prepare_items_pointer(this->quantities, '_', this->p_quantities);
 
 	ImGui::NewLine();
@@ -1287,19 +1296,18 @@ AdminUi::AddOthersWindow::AddOthersWindow(mongocxx::database db)
 {
 	this->products_collection = db["Products"];
 
-	//we are reallocating to make sure the size of this buffer is enough to hold the new string
-	this->p_others = new char[this->others.size() + 1];
-	memset(this->p_others, 0, this->others.size());
-	strncpy_s(this->p_others, this->others.size() + 1, this->others.c_str(), this->others.size());
+	// Reallocate this->p_others with new size
+	this->p_others = std::make_unique<char[]>(this->others.size() + 1);
+
+	// Clear the memory
+	std::fill(this->p_others.get(), this->p_others.get() + this->others.size(), 0);
+
+	// Copy the string
+	std::strncpy(this->p_others.get(), this->others.c_str(), this->others.size() + 1);
+
+	// Call prepare_items_pointer
 	this->prepare_items_pointer(this->others, '_', this->p_others);
 	
-}
-
-AdminUi::AddOthersWindow::~AddOthersWindow()
-{
-	delete[] this->p_others;
-	this->p_others = NULL;
-
 }
 
 int AdminUi::AddOthersWindow::others_current_item = 0;
@@ -1417,27 +1425,29 @@ AdminUi::RemoveOthersWindow::RemoveOthersWindow(mongocxx::database db)
 {
 	this->products_collection = db["Products"];
 
-	//we are reallocating to make sure the size of this buffer is enough to hold the new string
-	this->p_others = new char[this->others.size() + 1];
-	memset(this->p_others, 0, this->others.size());
-	strncpy_s(this->p_others, this->others.size() + 1, this->others.c_str(), this->others.size());
+	// Reallocate this->p_others with new size
+	this->p_others = std::make_unique<char[]>(this->others.size() + 1);
+
+	// Clear the memory
+	std::fill(this->p_others.get(), this->p_others.get() + this->others.size(), 0);
+
+	// Copy the string
+	std::strncpy(this->p_others.get(), this->others.c_str(), this->others.size() + 1);
+
+	// Call prepare_items_pointer
 	this->prepare_items_pointer(this->others, '_', this->p_others);
 
-	//we are reallocating to make sure the size of this buffer is enough to hold the new string
-	this->p_selected_others = new char[this->selected_others.size() + 1];
-	memset(this->p_selected_others, 0, this->selected_others.size());
-	strncpy_s(this->p_selected_others, this->selected_others.size() + 1, this->selected_others.c_str(), this->selected_others.size());
+	// Reallocate this->p_selected_others with new size
+	this->p_selected_others = std::make_unique<char[]>(this->selected_others.size() + 1);
+
+	// Clear the memory
+	std::fill(this->p_selected_others.get(), this->p_selected_others.get() + this->selected_others.size(), 0);
+
+	// Copy the string
+	std::strncpy(this->p_selected_others.get(), this->selected_others.c_str(), this->selected_others.size() + 1);
+
+	// Call prepare_items_pointer
 	this->prepare_items_pointer(this->selected_others, '_', this->p_selected_others);
-
-}
-
-AdminUi::RemoveOthersWindow::~RemoveOthersWindow()
-{
-	delete[] this->p_others;
-	this->p_others = NULL;
-
-	delete[] this->p_selected_others;
-	this->p_selected_others = NULL;
 
 }
 
@@ -1478,13 +1488,17 @@ int AdminUi::RemoveOthersWindow::create_remove_others_window()
 
 		mset_others(this->v_selected_others);
 
-		delete[] this->p_selected_others;
-		this->p_selected_others = NULL;
 
-		//we are reallocating to make sure the size of this buffer is enough to hold the new string
-		this->p_selected_others = new char[this->selected_others.size() + 1];
-		memset(this->p_selected_others, 0, this->selected_others.size());
-		strncpy_s(this->p_selected_others, this->selected_others.size() + 1, this->selected_others.c_str(), this->selected_others.size());
+		// Reallocate this->p_selected_others with new size
+		this->p_selected_others = std::make_unique<char[]>(this->selected_others.size() + 1);
+
+		// Clear the memory
+		std::fill(this->p_selected_others.get(), this->p_selected_others.get() + this->selected_others.size(), 0);
+
+		// Copy the string
+		std::strncpy(this->p_selected_others.get(), this->selected_others.c_str(), this->selected_others.size() + 1);
+
+		// Call prepare_items_pointer
 		this->prepare_items_pointer(this->selected_others, '_', this->p_selected_others);
 
 
@@ -1746,10 +1760,17 @@ AdminUi::RemoveAgentWindow::RemoveAgentWindow(mongocxx::database db)
 	this->filtered_phones = this->phones;
 	this->filtered_locations = this->locations;
 
-	this->p_admin_filter_types = new char[this->admin_filter_types.size() + 1];
-	memset(this->p_admin_filter_types, 0, this->admin_filter_types.size());
-	strncpy_s(this->p_admin_filter_types, this->admin_filter_types.size() + 1, this->admin_filter_types.c_str(), this->admin_filter_types.size());
-	this->prepare_filter_types_pointer(this->admin_filter_types, '_', this->p_admin_filter_types);
+	// Reallocate this->p_admin_filter_types with new size
+	this->p_admin_filter_types = std::make_unique<char[]>(this->admin_filter_types.size() + 1);
+
+	// Clear the memory
+	std::fill(this->p_admin_filter_types.get(), this->p_admin_filter_types.get() + this->admin_filter_types.size(), 0);
+
+	// Copy the string
+	std::strncpy(this->p_admin_filter_types.get(), this->admin_filter_types.c_str(), this->admin_filter_types.size() + 1);
+
+	// Call prepare_items_pointer
+	this->prepare_items_pointer(this->admin_filter_types, '_', this->p_admin_filter_types);
 }
 
 int AdminUi::RemoveAgentWindow::create_remove_agent_window()
@@ -1942,8 +1963,7 @@ int AdminUi::RemoveAgentWindow::create_admin_agents_filter()
 				this->filtered_locations.push_back(this->locations[item_num]);
 			}
 		}
-		
-
+	
 	}
 
 	ImGui::PopStyleColor();

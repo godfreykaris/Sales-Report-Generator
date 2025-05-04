@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{90384f33-3cdb-4e99-b415-86e9df795515}</ProjectGuid>
+    <RootNamespace>PointOfSaleSystem</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+    <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>LIBCMT.lib;MSVCRT.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="db\include\agents.h" />
+    <ClInclude Include="db\include\agent_sales.h" />
+    <ClInclude Include="db\include\app_basic.h" />
+    <ClInclude Include="db\include\app_common.h" />
+    <ClInclude Include="db\include\change_values.h" />
+    <ClInclude Include="db\include\compute_costs.h" />
+    <ClInclude Include="db\include\delete_components.h" />
+    <ClInclude Include="db\include\delete_from_stock.h" />
+    <ClInclude Include="db\include\insert_components.h" />
+    <ClInclude Include="db\include\manage_buying_and_selling_price.h" />
+    <ClInclude Include="db\include\manage_components_arrays.h" />
+    <ClInclude Include="db\include\manage_OperationalCosts.h" />
+    <ClInclude Include="db\include\new_docs.h" />
+    <ClInclude Include="db\include\retrieve_data.h" />
+    <ClInclude Include="db\include\update_stock.h" />
+    <ClInclude Include="server\server.h" />
+    <ClInclude Include="ui\admin_ui\admin_ui.h" />
+    <ClInclude Include="ui\change_password_ui\change_password.h" />
+    <ClInclude Include="ui\finance_ui\finance_ui.h" />
+    <ClInclude Include="ui\login_ui\login_ui.h" />
+    <ClInclude Include="ui\marketer_ui\marketer_ui.h" />
+    <ClInclude Include="ui\marketer_ui\stdafx.h" />
+    <ClInclude Include="ui\regular_ui\regular_user_ui.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imconfig.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="ui\ui_dependences\glew\include\eglew.h" />
+    <ClInclude Include="ui\ui_dependences\glew\include\glew.h" />
+    <ClInclude Include="ui\ui_dependences\glew\include\glxew.h" />
+    <ClInclude Include="ui\ui_dependences\glew\include\wglew.h" />
+    <ClInclude Include="ui\ui_dependences\glfw\include\glfw\glfw3.h" />
+    <ClInclude Include="ui\ui_dependences\glfw\include\glfw\glfw3native.h" />
+    <ClInclude Include="ui\ui_dependences\stb_image\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="db\src\agents.cpp" />
+    <ClCompile Include="db\src\agent_sales.cpp" />
+    <ClCompile Include="db\src\change_values.cpp" />
+    <ClCompile Include="db\src\compute_costs.cpp" />
+    <ClCompile Include="db\src\delete_components.cpp" />
+    <ClCompile Include="db\src\delete_from_stock.cpp" />
+    <ClCompile Include="db\src\insert_components.cpp" />
+    <ClCompile Include="db\src\manage_buying_and_selling_price.cpp" />
+    <ClCompile Include="db\src\manage_componets_arrays.cpp" />
+    <ClCompile Include="db\src\manage_OperationalCosts.cpp" />
+    <ClCompile Include="db\src\new_docs.cpp" />
+    <ClCompile Include="db\src\retrieve_data.cpp" />
+    <ClCompile Include="db\src\update_stock.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="server\server.cpp" />
+    <ClCompile Include="ui\admin_ui\admin_ui.cpp" />
+    <ClCompile Include="ui\change_password_ui\change_password.cpp" />
+    <ClCompile Include="ui\finance_ui\finance_ui.cpp" />
+    <ClCompile Include="ui\login_ui\login_ui.cpp" />
+    <ClCompile Include="ui\marketer_ui\marketer_ui.cpp" />
+    <ClCompile Include="ui\marketer_ui\stdafx.cpp" />
+    <ClCompile Include="ui\regular_ui\regular_user_ui.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="ui\ui_dependences\stb_image\stb_image.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Cousine-Regular.ttf" />
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\DroidSans.ttf" />
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Karla-Regular.ttf" />
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyClean.ttf" />
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyTiny.ttf" />
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Roboto-Medium.ttf" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

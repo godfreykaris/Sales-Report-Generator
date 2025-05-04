@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="db">
+      <UniqueIdentifier>{93e51fe4-e351-45ef-be0f-e25d6de4cbfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="db\src">
+      <UniqueIdentifier>{754ccd6f-a67b-4a91-af16-220f69b77ead}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="db\include">
+      <UniqueIdentifier>{1ee9d100-c66a-4ace-a720-ffc4c9a265fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server">
+      <UniqueIdentifier>{cb49ab9f-f4f0-4fe1-b232-9349aa3b912e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{37614460-4290-4d93-812a-9773e471b903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\admin_ui">
+      <UniqueIdentifier>{314d771f-f343-4848-8526-6cbf00fb2501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\change_password_ui">
+      <UniqueIdentifier>{30bb9aa1-badb-4477-96c3-07a7b2f21ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\finance_ui">
+      <UniqueIdentifier>{a9d5b4b2-b952-4a5d-88a2-1bf178da56ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\login_ui">
+      <UniqueIdentifier>{db326c7f-67ab-4fcc-bd00-09c6f5f93d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\marketer_ui">
+      <UniqueIdentifier>{800cbf2b-4761-4d7f-953d-6d597d353dd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_api">
+      <UniqueIdentifier>{b17b90ba-0a9d-4ea1-9bd6-1073b99229f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_dependencies">
+      <UniqueIdentifier>{095708bb-f113-4861-baa9-f9fad9ab93ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_dependencies\glew">
+      <UniqueIdentifier>{d38cb74b-8e86-4c07-b6df-315be172f13b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_dependencies\glew\include">
+      <UniqueIdentifier>{3d653b65-54a8-4678-bfb8-1a674903bb8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_dependencies\glfw">
+      <UniqueIdentifier>{896bd8e0-d6ac-4ee5-990e-d7350dd9b288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_dependencies\glfw\include">
+      <UniqueIdentifier>{0352c822-1882-485b-a6eb-102d58412d91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_dependencies\glfw\include\glfw">
+      <UniqueIdentifier>{90efe4a7-ea0f-42e1-b4d3-9d4f2e37722b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_dependencies\stb_image">
+      <UniqueIdentifier>{3ecef8cf-91a5-48c5-82dd-3c3140208752}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\regular_ui">
+      <UniqueIdentifier>{835517cd-2836-44f4-b21b-0b73bde57cf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_api\vendor">
+      <UniqueIdentifier>{616b16d8-fdf0-404a-a349-e2b0ec26c5be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_api\vendor\imgui">
+      <UniqueIdentifier>{fc6d2ab3-39cc-4f33-a302-882c63c6a99a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_api\vendor\imgui\misc">
+      <UniqueIdentifier>{8fb3c926-42c3-49b8-af05-425c51d876db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\ui_api\vendor\imgui\misc\fonts">
+      <UniqueIdentifier>{907b12ce-e8ea-44e9-b6dd-14f848914c3d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="db\include\agent_sales.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\agents.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\app_basic.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\app_common.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\change_values.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\compute_costs.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\delete_components.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\delete_from_stock.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\insert_components.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\manage_buying_and_selling_price.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\manage_components_arrays.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\manage_OperationalCosts.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\new_docs.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\retrieve_data.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="db\include\update_stock.h">
+      <Filter>db\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\admin_ui\admin_ui.h">
+      <Filter>ui\admin_ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\change_password_ui\change_password.h">
+      <Filter>ui\change_password_ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\finance_ui\finance_ui.h">
+      <Filter>ui\finance_ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\login_ui\login_ui.h">
+      <Filter>ui\login_ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\marketer_ui\marketer_ui.h">
+      <Filter>ui\marketer_ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\marketer_ui\stdafx.h">
+      <Filter>ui\marketer_ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_dependences\stb_image\stb_image.h">
+      <Filter>ui\ui_dependencies\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_dependences\glfw\include\glfw\glfw3.h">
+      <Filter>ui\ui_dependencies\glfw\include\glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_dependences\glfw\include\glfw\glfw3native.h">
+      <Filter>ui\ui_dependencies\glfw\include\glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_dependences\glew\include\eglew.h">
+      <Filter>ui\ui_dependencies\glew\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_dependences\glew\include\glew.h">
+      <Filter>ui\ui_dependencies\glew\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_dependences\glew\include\glxew.h">
+      <Filter>ui\ui_dependencies\glew\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_dependences\glew\include\wglew.h">
+      <Filter>ui\ui_dependencies\glew\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\regular_ui\regular_user_ui.h">
+      <Filter>ui\regular_ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imconfig.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_internal.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imstb_rectpack.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imstb_textedit.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imstb_truetype.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="server\server.h">
+      <Filter>server</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="db\src\agent_sales.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\agents.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\change_values.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\compute_costs.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\delete_components.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\delete_from_stock.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\insert_components.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\manage_buying_and_selling_price.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\manage_componets_arrays.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\manage_OperationalCosts.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\new_docs.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\retrieve_data.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="db\src\update_stock.cpp">
+      <Filter>db\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\admin_ui.cpp">
+      <Filter>ui\admin_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\change_password_ui\change_password.cpp">
+      <Filter>ui\change_password_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\finance_ui\finance_ui.cpp">
+      <Filter>ui\finance_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\login_ui\login_ui.cpp">
+      <Filter>ui\login_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\marketer_ui\marketer_ui.cpp">
+      <Filter>ui\marketer_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\marketer_ui\stdafx.cpp">
+      <Filter>ui\marketer_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_dependences\stb_image\stb_image.cpp">
+      <Filter>ui\ui_dependencies\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\regular_ui\regular_user_ui.cpp">
+      <Filter>ui\regular_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_demo.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_draw.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_tables.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_widgets.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="server\server.cpp">
+      <Filter>server</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Cousine-Regular.ttf">
+      <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\DroidSans.ttf">
+      <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Karla-Regular.ttf">
+      <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyClean.ttf">
+      <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyTiny.ttf">
+      <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Roboto-Medium.ttf">
+      <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
+    </Font>
+  </ItemGroup>
+</Project>

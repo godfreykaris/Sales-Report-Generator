@@ -335,12 +335,12 @@ namespace AdminUi
 		public:
 			AddOthersWindow(mongocxx::database db);
 			AddOthersWindow() = default;
-			~AddOthersWindow();
+			~AddOthersWindow() = default;
 
 			/*properties*/
 		public:
 			
-			char* p_others;
+			std::unique_ptr<char[]> p_others;
 			std::string others = "Select_Season_Age Group_Location_";
 			std::vector<std::string> v_others = { "Season" , "Age Group",  "Location"};
 
@@ -365,15 +365,15 @@ namespace AdminUi
 		public:
 			RemoveOthersWindow(mongocxx::database db);
 			RemoveOthersWindow() = default;
-			~RemoveOthersWindow();
+			~RemoveOthersWindow() = default;
 
 			/*properties*/
 		public:
 
-			char* p_others;
+			std::unique_ptr<char[]> p_others;
 			std::string others = "Select_Season_Age Group_Location_";
 
-			char* p_selected_others;			
+			std::unique_ptr<char[]> p_selected_others;
 			std::string selected_others = "Select_";
 
 			std::string selected_other;
@@ -449,7 +449,7 @@ namespace AdminUi
 
 		std::string admin_filter_types = "No Criteria Selected_Filter by ID_Filter by Name_Filter by Phone_Filter by Location_";
 
-		char* p_admin_filter_types;
+		std::unique_ptr<char[]> p_admin_filter_types;
 
 		mongocxx::collection agents;
 		mongocxx::collection agent_sales;

@@ -71,7 +71,7 @@ int main(int, char**) {
     ImFontConfig font_config;
     font_config.RasterizerMultiply = 1.5f; // Improve rendering quality
     ImFont* default_font = io.Fonts->AddFontFromFileTTF("J:\\source\\PointOfSaleSystem\\PointOfSaleSystem\\ui\\ui_api\\vendor\\imgui\\misc\\fonts\\Roboto-Medium.ttf", 16.0f, &font_config);
-    ImFont* large_font = io.Fonts->AddFontFromFileTTF("J:\\source\\PointOfSaleSystem\\PointOfSaleSystem\\ui\\ui_api\\vendor\\imgui\\misc\\fonts\\Roboto-Medium.ttf", 24.0f, &font_config);
+    ImFont* large_font = io.Fonts->AddFontFromFileTTF("J:\\source\\PointOfSaleSystem\\PointOfSaleSystem\\ui\\ui_api\\vendor\\imgui\\misc\\fonts\\Roboto-Medium.ttf", 20.0f, &font_config);
     if (!default_font || !large_font) {
         std::cerr << "Failed to load font!" << std::endl;
         io.Fonts->AddFontDefault(); // Fallback to default font

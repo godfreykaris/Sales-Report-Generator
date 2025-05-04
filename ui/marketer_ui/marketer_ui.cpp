@@ -631,14 +631,9 @@ int MUserUi::CustomizedReportWindow::display_brands_sales()
     }
     ImGui::Unindent();
 
-    //free before reallocating
-    delete[]  this->p_brands;
-    this->p_brands = NULL;
-
-    //we are reallocating to make sure the size of this buffer is enough to hold the new string
-    this->p_brands = new char[this->brands.size() + 1];
-    memset(this->p_brands, 0, this->brands.size());
-    strncpy_s(this->p_brands, this->brands.size() + 1, this->brands.c_str(), this->brands.size());
+    this->p_brands = std::make_unique<char[]>(this->brands.size() + 1);
+    std::fill_n(this->p_brands.get(), this->brands.size() + 1, 0);
+    std::strncpy(this->p_brands.get(), this->brands.c_str(), this->brands.size());
     this->prepare_items_pointer(this->brands, '_', this->p_brands);
         
     return 1;

@@ -41,9 +41,9 @@ int LoginUi::LoginWindow::create_login_window()
     ImGui::Begin("Login", NULL, this->window_flags | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 
     // Title with larger font
-    ImGui::PushFont(this->large_font); // Use 24.0f font
+    ImGui::PushFont(this->large_font); 
     ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize("POS System Login").x) * 0.5f); // Center title
-    ImGui::Text("POS System Login");
+    ImGui::Text("Sales System Login");
     ImGui::PopFont();
     ImGui::Separator(); // Visual separator
 
