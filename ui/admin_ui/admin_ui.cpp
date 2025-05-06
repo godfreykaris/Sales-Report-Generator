@@ -144,47 +144,67 @@ AdminUi::AddorRemoveItemWindow::AddorRemoveItemWindow(AddItemWindow& add_item, R
 
 int AdminUi::AddorRemoveItemWindow::create_add_or_remove_items_window()
 {
-	// Set dark theme background
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+	// Modern dark theme with rounded corners
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(40, 44, 52, 255));
+	ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(0, 128, 128, 50)); // Teal border for glassmorphism
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f); // Rounded window corners
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f); // Rounded button corners
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Larger button padding
 
 	// Center window with responsive size
 	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-	ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(320, 240), ImGuiCond_Once);
 
 	ImGui::Begin("Add Or Remove Item", &this->show_window, this->window_flags | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-	// Title
-	ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.9f, 1.0f), "Manage Items");
+	// Title with modern typography
+	ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]); // Assuming a bold font; adjust if needed
+	ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Manage Items").x) * 0.5f);
+	ImGui::TextColored(ImVec4(0.95f, 0.95f, 0.95f, 1.0f), "Manage Items");
+	ImGui::PopFont();
+
+	// Stylish separator with teal accent
+	ImGui::PushStyleColor(ImGuiCol_Separator, IM_COL32(0, 128, 128, 100));
 	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	ImGui::PopStyleColor();
+	ImGui::Dummy(ImVec2(0.0f, 15.0f));
 
-	// Button styling: Blue for actions
-	ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(50, 100, 255, 255));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(70, 120, 255, 255));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(90, 140, 255, 255));
+	// Button styling: Teal with neumorphic shadow
+	ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 128, 128, 255));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(0, 160, 160, 255));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(0, 192, 192, 255));
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // White text for buttons
+	ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(0, 100, 100, 100)); // Subtle shadow effect
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
 
-	// Center buttons
-	float button_width = 150.0f;
+	// Center buttons with larger size for modern look
+	float button_width = 180.0f;
 	float window_width = ImGui::GetContentRegionAvail().x;
+
 	ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
-	if (ImGui::Button("Add Item", ImVec2(button_width, 30.0f)))
+	if (ImGui::Button("Add Item", ImVec2(button_width, 40.0f)))
 		this->add_item->show_window = true;
 
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	ImGui::Dummy(ImVec2(0.0f, 15.0f));
 	ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
-	if (ImGui::Button("Remove Item", ImVec2(button_width, 30.0f)))
+	if (ImGui::Button("Remove Item", ImVec2(button_width, 40.0f)))
 		this->remove_item->show_window = true;
 
-	ImGui::PopStyleColor(3);
+	// Pop button styles (5 colors + 1 style var)
+	ImGui::PopStyleColor(5);
+	ImGui::PopStyleVar(1); // Pop FrameBorderSize
 
-	// Nested window calls
+	// Nested window calls (logic unchanged)
 	if (this->add_item->show_window)
 		this->add_item->create_add_items_window();
 
 	if (this->remove_item->show_window)
 		this->remove_item->create_remove_items_window();
 
-	ImGui::PopStyleColor();
+	// Pop window styles (2 colors + 4 style vars)
+	ImGui::PopStyleColor(2); // WindowBg, Border
+	ImGui::PopStyleVar(4); // WindowRounding, WindowBorderSize, FrameRounding, FramePadding
 	ImGui::End();
 
 	return 1;
@@ -199,46 +219,55 @@ AdminUi::AddItemWindow::AddItemWindow(AddProductWindow& add_product, AddNewBrand
 
 int AdminUi::AddItemWindow::create_add_items_window()
 {
-	// Set dark theme background
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+	// Push UX-friendly colors
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Near-white text for high contrast
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.13f, 0.14f, 0.15f, 1.0f)); // Dark charcoal background
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 1.0f)); // Soft blue buttons
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.36f, 0.69f, 1.0f, 1.0f)); // Lighter blue on hover
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20f, 0.49f, 0.88f, 1.0f)); // Darker blue when clicked
+	ImGui::PushStyleColor(ImGuiCol_Separator, ImVec4(0.26f, 0.59f, 0.98f, 0.5f)); // Soft blue separator
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Slightly rounded window corners
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f); // Rounded button corners
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Comfortable button padding
 
-	// Center window with responsive size
+	// Set window position and size (centered, responsive)
 	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-	ImGui::SetNextWindowSize(ImVec2(300, 250), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(340, 300), ImGuiCond_Once);
 
+	// Create window with basic flags
 	ImGui::Begin("Add Item", &this->show_window, this->window_flags | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-	// Title
-	ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.9f, 1.0f), "Add New Item");
+	// Title (centered)
+	float title_width = ImGui::CalcTextSize("Add New Item").x;
+	ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - title_width) * 0.5f);
+	ImGui::Text("Add New Item");
 	ImGui::Separator();
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 
-	// Button styling: Blue for actions
-	ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(50, 100, 255, 255));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(70, 120, 255, 255));
-	ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(90, 140, 255, 255));
-
-	// Center buttons
-	float button_width = 150.0f;
+	// Buttons for Product, Brand, Quantity
+	float button_width = 200.0f;
 	float window_width = ImGui::GetContentRegionAvail().x;
 
+	// Product button
 	ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
-	if (ImGui::Button("Product", ImVec2(button_width, 30.0f)))
+	if (ImGui::Button("Product", ImVec2(button_width, 40.0f)))
 		this->add_product->show_window = true;
 
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	ImGui::Dummy(ImVec2(0.0f, 15.0f));
+
+	// Brand button
 	ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
-	if (ImGui::Button("Brand", ImVec2(button_width, 30.0f)))
+	if (ImGui::Button("Brand", ImVec2(button_width, 40.0f)))
 		this->add_brand->brand_win.show_window = true;
 
-	ImGui::Dummy(ImVec2(0.0f, 10.0f));
+	ImGui::Dummy(ImVec2(0.0f, 15.0f));
+
+	// Quantity button
 	ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
-	if (ImGui::Button("Quantity", ImVec2(button_width, 30.0f)))
+	if (ImGui::Button("Quantity", ImVec2(button_width, 40.0f)))
 		this->add_quantity->quantity_win.show_window = true;
 
-	ImGui::PopStyleColor(3);
-
-	// Nested window calls
+	// Nested window calls (unchanged)
 	if (this->add_product->show_window)
 		this->add_product->create_add_product_window();
 
@@ -263,7 +292,9 @@ int AdminUi::AddItemWindow::create_add_items_window()
 	if (this->add_quantity->quantity_win.success == true)
 		this->add_quantity->notify_sale_status(this->add_quantity->quantity_win.success);
 
-	ImGui::PopStyleColor();
+	// Pop styles
+	ImGui::PopStyleColor(6); // Text, WindowBg, Button, ButtonHovered, ButtonActive, Separator
+	ImGui::PopStyleVar(3);  // WindowRounding, FrameRounding, FramePadding
 	ImGui::End();
 
 	return 1;
@@ -433,64 +464,86 @@ AdminUi::AddBrandWindow::AddBrandWindow(mongocxx::database db)
 
 char AdminUi::AddBrandWindow::c_brand_name[128] = "";
 char AdminUi::AddBrandWindow::c_n_brand_name[128] = "";
-int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, std::string &brand, std::vector<std::string> &quantities, std::vector<double> &selling_price, std::vector<double> &buying_price, std::vector<int> &number_of_items, std::string caller)
+int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, std::string& brand, std::vector<std::string>& quantities, std::vector<double>& selling_price, std::vector<double>& buying_price, std::vector<int>& number_of_items, std::string caller)
 {
 	ImVec2 size = ImVec2(300, 190);
 	std::string label = "Add Brand";
 	std::string quantity_caller = "Brand";
 	if (caller.compare("Product") != 0)
 	{
-		size = ImVec2(350, 350);
+		size = ImVec2(350, 400);
 		label = "Add New Brand";
 		quantity_caller = "New Brand";
 	}
-		
 
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+	// Consistent styling with add_items_window
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Near-white text
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.13f, 0.14f, 0.15f, 1.0f)); // Dark charcoal background
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 1.0f)); // Soft blue buttons
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.36f, 0.69f, 1.0f, 1.0f)); // Lighter blue on hover
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20f, 0.49f, 0.88f, 1.0f)); // Darker blue when clicked
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(70, 70, 70, 255)); // Input field background
+	ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 150, 200, 128)); // Subtle blue border
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Rounded window corners
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f); // Rounded input/button corners
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Comfortable padding
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f)); // Balanced spacing
 
-	ImGui::SetNextWindowPos(ImVec2(400, 350), ImGuiCond_Once);
-	ImGui::SetNextWindowSize(size, ImGuiCond_Once);
+	// Center relative to parent and position to the right of add items window
+	ImVec2 parent_center = ImGui::GetMainViewport()->GetCenter();
+	ImVec2 add_items_size(340, 300);
+	float offset_x = add_items_size.x * 0.5f + size.x * 0.5f + 20.0f;
+	ImGui::SetNextWindowPos(ImVec2(parent_center.x + offset_x, parent_center.y), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 
-	ImGui::Begin(label.c_str(), &this->show_window, this->window_flags);
+	ImGui::Begin(label.c_str(), &this->show_window, this->window_flags | ImGuiWindowFlags_NoCollapse);
+
+	// Title (centered)
+	float title_width = ImGui::CalcTextSize(label.c_str()).x;
+	ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - title_width) * 0.5f);
+	ImGui::Text("%s", label.c_str());
+	ImGui::Separator();
+	ImGui::Dummy(ImVec2(0.0f, 15.0f));
+
+	// Fixed label width for alignment
+	const float label_width = 100.0f;
+	const float input_width = 150.0f;
 
 	if (caller.compare("Product") != 0)
-	{		
-		ImGui::SameLine(90.0, 0.0);
+	{
+		ImGui::Text("Product:");
+		ImGui::SameLine(label_width);
+		ImGui::SetNextItemWidth(input_width);
 		this->mset_products();
-		this->create_listbox_filter(this->products, "Product", this->selected_product, '_', ImVec2(210, 150));
+		this->create_listbox_filter(this->products, "Product", this->selected_product, '_', ImVec2(input_width, 200));
+		ImGui::Dummy(ImVec2(0.0f, 15.0f));
 	}
 
-
-	ImGui::Dummy(ImVec2(0.0, 10.0));
-	ImGui::NewLine();
-	ImGui::Text("Brand Name: ");
-
-	ImGui::SameLine(100.0, 0.0);
-	ImGui::SetNextItemWidth(150);
+	// Brand Name input
+	ImGui::Text("Brand Name:");
+	ImGui::SameLine(label_width);
+	ImGui::SetNextItemWidth(input_width);
 	if (caller.compare("Product") == 0)
-		ImGui::InputTextWithHint("###", "name", this->c_brand_name, IM_ARRAYSIZE(this->c_brand_name));
+		ImGui::InputTextWithHint("##BrandName", "name", this->c_brand_name, IM_ARRAYSIZE(this->c_brand_name));
 	else
-		ImGui::InputTextWithHint("###", "name", this->c_n_brand_name, IM_ARRAYSIZE(this->c_n_brand_name));
+		ImGui::InputTextWithHint("##NewBrandName", "name", this->c_n_brand_name, IM_ARRAYSIZE(this->c_n_brand_name));
 
-
-	//handle any error
+	// Handle error messages
 	if (this->quantity_win.input_error == true)
 		this->admin_error_message(this->quantity_win.input_error);
-	
-	
 
+	// Quantity window logic
 	if (this->quantity_win.finish == true && this->quantity_win.minput_error == false)
 	{
-		//check for a duplicate
 		std::vector<std::string> previous_quantities = quantities;
 		previous_quantities.pop_back();
 		bool status = check_for_duplicate(previous_quantities, quantities[quantities.size() - 1]);
 
 		if (status == true)
 		{
-			quantities[quantities.size() - 1] = ""; //this will ensure that it is poped back from the vector in a later if statement
+			quantities[quantities.size() - 1] = "";
 			this->quantity_win.input_error = true;
-		}			
+		}
 
 		this->quantity_win.show_window = false;
 		this->quantity_win.finish = false;
@@ -499,32 +552,32 @@ int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, s
 
 	if (this->quantity_win.show_window == true)
 		quantity_win.create_add_quantity_window(quantities[quantity_index], selling_price[quantity_index], buying_price[quantity_index], number_of_items[quantity_index], quantity_caller);
-	else if (this->quantity_win.show_window == false &&  quantities.size() != 0 && quantities[quantities.size() - 1].compare("") == 0)
+	else if (this->quantity_win.show_window == false && quantities.size() != 0 && quantities[quantities.size() - 1].compare("") == 0)
 	{
 		quantities.pop_back();
 		selling_price.pop_back();
 		buying_price.pop_back();
 		number_of_items.pop_back();
 
-		if(this->quantity_index != 0)
+		if (this->quantity_index != 0)
 			this->quantity_index--;
 	}
 
+	ImGui::Dummy(ImVec2(0.0f, 15.0f));
 
-	ImGui::Dummy(ImVec2(0.0, 10.0));
-	ImGui::NewLine();
-	ImGui::SameLine(20.0, 0.0);
+	// Buttons (centered)
+	float button_width = 120.0f;
+	float total_buttons_width = button_width * 2 + 10.0f; // Two buttons + spacing
+	ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - total_buttons_width) * 0.5f);
 
-	if (ImGui::Button("Add Quantity", ImVec2(120, 0)) && this->quantity_win.show_window == false)
+	if (ImGui::Button("Add Quantity", ImVec2(button_width, 0)) && this->quantity_win.show_window == false)
 	{
 		if (caller.compare("Product") == 0)
 			this->brand_name = this->c_brand_name;
 		else
 			this->brand_name = this->c_n_brand_name;
 
-		
-
-		if (this->brand_name.compare("") != 0 )
+		if (this->brand_name.compare("") != 0)
 		{
 			quantities.push_back("");
 			selling_price.push_back(0.0);
@@ -532,37 +585,32 @@ int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, s
 			number_of_items.push_back(0);
 
 			this->quantity_win.show_window = true;
-
 			this->brand_name = this->selected_product + "_" + this->brand_name;
 		}
 		else
 			this->input_error = true;
-
-		
-				
 	}
 
-	ImGui::SameLine(150.0, 0.0);
+	ImGui::SameLine(0.0f, 10.0f);
 
-	if (ImGui::Button("Finish", ImVec2(120, 0)))
+	if (ImGui::Button("Finish", ImVec2(button_width, 0)))
 	{
 		if (caller.compare("Product") == 0)
 		{
 			this->brand_name = this->c_brand_name;
 			brand = product_name + "_" + this->brand_name;
-		}			
+		}
 		else
 		{
 			this->brand_name = this->c_n_brand_name;
 			brand = this->selected_product + "_" + this->brand_name;
 		}
-		
 
 		bool found_unwanted_char = check_unwanted_characters(this->brand_name);
 
 		if ((this->brand_name.compare("") == 0) || quantities.size() == 0 || found_unwanted_char == true)
 		{
-			this->input_error = true;			
+			this->input_error = true;
 		}
 		else
 		{
@@ -572,28 +620,26 @@ int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, s
 				{
 					std::vector<std::string> v_brands = get_product_brands_array(this->products_collection, this->selected_product);
 					bool status = check_for_duplicate(v_brands, this->brand_name);
-					
+
 					if (status == false)
 					{
 						insert_brand(this->products_collection, this->stock, brand, quantities, selling_price, buying_price, number_of_items, this->selected_product);
 						this->success = true;
-					}						
+					}
 					else
 						this->input_error = true;
 				}
 				else
 					this->input_error = true;
-				
 			}
 
 			quantity_index = 0;
 			this->finish = true;
-		}		
-
+		}
 	}
 
-
-	ImGui::PopStyleColor();
+	ImGui::PopStyleColor(7); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border
+	ImGui::PopStyleVar(4); // WindowRounding, FrameRounding, FramePadding, ItemSpacing
 	ImGui::End();
 	return 1;
 }
@@ -932,63 +978,88 @@ AdminUi::RemoveItemWindow::RemoveItemWindow(RemoveProductWindow& remove_product,
 
 int AdminUi::RemoveItemWindow::create_remove_items_window()
 {
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+    // Push UX-friendly colors
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Near-white text for high contrast
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.13f, 0.14f, 0.15f, 1.0f)); // Dark charcoal background
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 1.0f)); // Soft blue buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.36f, 0.69f, 1.0f, 1.0f)); // Lighter blue on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20f, 0.49f, 0.88f, 1.0f)); // Darker blue when clicked
+    ImGui::PushStyleColor(ImGuiCol_Separator, ImVec4(0.26f, 0.59f, 0.98f, 0.5f)); // Soft blue separator
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Slightly rounded window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f); // Rounded button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Comfortable button padding
 
-	ImGui::SetNextWindowPos(ImVec2(350, 200), ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(220, 250), ImGuiCond_Once);
+    // Set window position and size (centered, responsive)
+    ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(340, 300), ImGuiCond_Once);
 
-	ImGui::Begin("Remove Item", &this->show_window, this->window_flags);
+    // Create window with basic flags
+    ImGui::Begin("Remove Item", &this->show_window, this->window_flags | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
-	if (this->remove_product->show_window)
-		this->remove_product->create_remove_product_window();
+    // Title (centered)
+    float title_width = ImGui::CalcTextSize("Remove Item").x;
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - title_width) * 0.5f);
+    ImGui::Text("Remove Item");
+    ImGui::Separator();
+    ImGui::Dummy(ImVec2(0.0f, 20.0f));
 
-	if (this->remove_product->success == true)
-	{
-		this->remove_product->notify_sale_status(this->remove_product->success);
-		this->remove_product->show_window = false;
-	}		
+    // Buttons for Product, Brand, Quantity
+    float button_width = 200.0f;
+    float window_width = ImGui::GetContentRegionAvail().x;
 
+    // Product button
+    ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
+    if (ImGui::Button("Product", ImVec2(button_width, 40.0f)))
+        this->remove_product->show_window = true;
 
-	ImGui::Dummy(ImVec2(0.0, 10.0));
-	ImGui::NewLine();
-	ImGui::SameLine(50.0, 0.0);
-	if (ImGui::Button("Product", ImVec2(145.0, 20.0)))
-		this->remove_product->show_window = true;
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
 
+    // Brand button
+    ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
+    if (ImGui::Button("Brand", ImVec2(button_width, 40.0f)))
+        this->remove_brand->show_window = true;
 
-	if (this->remove_brand->show_window)
-		this->remove_brand->create_remove_brand_window();
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
 
-	if(this->remove_brand->success == true)
-	{
-		this->remove_brand->notify_sale_status(this->remove_brand->success);
-		this->remove_brand->show_window = false;
-	}
-	
-	
-	ImGui::Dummy(ImVec2(0.0, 10.0));
-	ImGui::NewLine();
-	ImGui::SameLine(50.0, 0.0);
-	if (ImGui::Button("Brand", ImVec2(145.0, 20.0)))
-		this->remove_brand->show_window = true;
+    // Quantity button
+    ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
+    if (ImGui::Button("Quantity", ImVec2(button_width, 40.0f)))
+        this->remove_quantity->show_window = true;
 
-	if (this->remove_quantity->show_window)
-		this->remove_quantity->create_remove_quantity_window();
+    // Nested window calls and state handling
+    if (this->remove_product->show_window)
+        this->remove_product->create_remove_product_window();
 
-	if (this->remove_quantity->success == true)
-		this->remove_quantity->notify_sale_status(this->remove_quantity->success);
+    if (this->remove_product->success == true)
+    {
+        this->remove_product->notify_sale_status(this->remove_product->success);
+        this->remove_product->show_window = false;
+    }
 
-	ImGui::Dummy(ImVec2(0.0, 10.0));
-	ImGui::NewLine();
-	ImGui::SameLine(50.0, 0.0);
-	if (ImGui::Button("Quantity", ImVec2(145.0, 20.0)))
-		this->remove_quantity->show_window = true;
-		
+    if (this->remove_brand->show_window)
+        this->remove_brand->create_remove_brand_window();
 
-	ImGui::PopStyleColor();
-	ImGui::End();
+    if (this->remove_brand->success == true)
+    {
+        this->remove_brand->notify_sale_status(this->remove_brand->success);
+        this->remove_brand->show_window = false;
+    }
 
-	return 1;
+    if (this->remove_quantity->show_window)
+        this->remove_quantity->create_remove_quantity_window();
+
+    if (this->remove_quantity->success == true)
+    {
+        this->remove_quantity->notify_sale_status(this->remove_quantity->success);
+        this->remove_quantity->show_window = false; // Added to ensure consistency
+    }
+
+    // Pop styles
+    ImGui::PopStyleColor(6); // Text, WindowBg, Button, ButtonHovered, ButtonActive, Separator
+    ImGui::PopStyleVar(3);  // WindowRounding, FrameRounding, FramePadding
+    ImGui::End();
+
+    return 1;
 }
 
 

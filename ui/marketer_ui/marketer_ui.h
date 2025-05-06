@@ -49,7 +49,7 @@ namespace MUserUi
 			bool show_window = false;
 			ImGuiWindowFlags window_flags;
 
-			Word::_ApplicationPtr pWordApp;
+			//Word::_ApplicationPtr pWordApp;
 
 			GLFWwindow* window;
 			HWND main_window;
@@ -108,42 +108,42 @@ namespace MUserUi
 	};
 
 
-	class WordDocument
-	{
-		/*Constructor and Destructor*/
-	public:
-		WordDocument(GeneralReportWindow *gr_window, CustomizedReportWindow* cr_window);
-		WordDocument() = default;
-		~WordDocument() = default;
+	//class WordDocument
+	//{
+	//	/*Constructor and Destructor*/
+	//public:
+	//	WordDocument(GeneralReportWindow *gr_window, CustomizedReportWindow* cr_window);
+	//	WordDocument() = default;
+	//	~WordDocument() = default;
 
-		/*properties*/
-	//private:
+	//	/*properties*/
+	////private:
 
-		_variant_t fls = false;
+	//	_variant_t fls = false;
 
-		std::string  file_name;
+	//	std::string  file_name;
 
-		Word::_ApplicationPtr pWordApp;
-		Word::DocumentsPtr dptr;
-		Word::_DocumentPtr pDoc;
+	//	Word::_ApplicationPtr pWordApp;
+	//	Word::DocumentsPtr dptr;
+	//	Word::_DocumentPtr pDoc;
 
-		Word::ParagraphsPtr p_Paras;
-		Word::ParagraphPtr p_Para;
-		Word::RangePtr p_ParaRng;
+	//	Word::ParagraphsPtr p_Paras;
+	//	Word::ParagraphPtr p_Para;
+	//	Word::RangePtr p_ParaRng;
 
-		Word::_ParagraphFormatPtr paraformat;
+	//	Word::_ParagraphFormatPtr paraformat;
 
-		GeneralReportWindow* gr_window;
-		CustomizedReportWindow* cr_window;
+	//	GeneralReportWindow* gr_window;
+	//	CustomizedReportWindow* cr_window;
 
-		/*methods*/
-	public:
-		void initialize();
-		void uninitialize();
+	//	/*methods*/
+	//public:
+	//	void initialize();
+	//	void uninitialize();
 
-		int create_document(std::string caller);
+	//	int create_document(std::string caller);
 
-	};
+	//};
 
 	class ShowMarketerWindow : public CustomizedReportWindow
 	{

@@ -173,24 +173,34 @@ void RUserUi::Window::prepare_items_pointer(const std::string& items, char item_
     }
 }
 
-// Create listbox filter with styled appearance
 int RUserUi::Window::create_listbox_filter(const std::string& items, const std::string& items_description,
     std::string& selected_item, char item_separator, ImVec2 size,
     const std::string& caller)
 {
     ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(50, 50, 50, 255)); // Darker child background
     ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(200, 200, 200, 255)); // Light text
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(60, 60, 65, 255)); // Input field background
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, IM_COL32(80, 80, 85, 255)); // Input hover
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(100, 100, 105, 255)); // Input active
+    ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 150, 200, 128)); // Subtle blue border
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f); // Rounded frame
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f)); // Balanced spacing
     ImGui::BeginChild(items_description.c_str(), size, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
     // Display selected item
     std::string display_text = items_description + ": " + selected_item;
     ImGui::Text(display_text.c_str());
+    ImGui::Dummy(ImVec2(0.0f, 8.0f)); // Spacing
 
-    // Search filter
+    // Search filter with label to the left
+    ImGui::Text("Search");
+    ImGui::SameLine();
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
+    ImGui::SetNextItemWidth(size.x - ImGui::CalcTextSize("Search").x - 20.0f); // Adjust width to fit
     static ImGuiTextFilter filter;
-    std::string label = "Search##" + items_description;
-    filter.Draw(label.c_str(), size.x - 20.0f);
+    std::string label = "##Search_" + items_description; // Unique ID
+    filter.Draw(label.c_str(), size.x - ImGui::CalcTextSize("Search").x - 20.0f);
+    ImGui::Dummy(ImVec2(0.0f, 8.0f)); // Spacing
 
     // Parse items into vector
     std::vector<std::string> items_array;
@@ -210,8 +220,8 @@ int RUserUi::Window::create_listbox_filter(const std::string& items, const std::
     items_array.push_back(" ");
 
     // Listbox
-    label = "##" + items_description;
-    if (ImGui::ListBoxHeader(label.c_str(), ImVec2(size.x - 10.0f, size.y - 60.0f))) {
+    label = "##Listbox_" + items_description;
+    if (ImGui::ListBoxHeader(label.c_str(), ImVec2(size.x - 10.0f, size.y - 80.0f))) { // Adjusted height
         for (const auto& list_item : items_array) {
             if (ImGui::Selectable(list_item.c_str())) {
                 if (list_item != " ") {
@@ -225,8 +235,8 @@ int RUserUi::Window::create_listbox_filter(const std::string& items, const std::
         ImGui::ListBoxFooter();
     }
 
-    ImGui::PopStyleColor(2);
-    ImGui::PopStyleVar();
+    ImGui::PopStyleColor(6); // ChildBg, Text, FrameBg, FrameBgHovered, FrameBgActive, Border
+    ImGui::PopStyleVar(2); // FrameRounding, ItemSpacing
     ImGui::EndChild();
 
     return 1;

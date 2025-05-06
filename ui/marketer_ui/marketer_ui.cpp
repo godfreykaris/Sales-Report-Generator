@@ -73,105 +73,105 @@ int MUserUi::ShowMarketerWindow::create_show_marketer_window()
     return 1;
 }
 
-MUserUi::WordDocument::WordDocument(GeneralReportWindow *gr_window, CustomizedReportWindow* cr_window)
-{
-    if (gr_window != NULL)
-    {
-        this->gr_window = gr_window;
-        this->file_name = gr_window->file_name;
-    }
-       
-    else
-    {
-        this->file_name = cr_window->file_name;
-        this->cr_window = cr_window;
-    }
-
-   
-    
-}
-
-void MUserUi::WordDocument::initialize()
-{
-    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-}
-
-void MUserUi::WordDocument::uninitialize()
-{
-    pDoc->Close(&fls);
-    pWordApp->Quit();
-
-    if(this->cr_window != NULL)
-        this->cr_window->saving = false; //stop showing the saving indicator circle
-    else
-        this->gr_window->saving = false;
-
-}
-
-
-int MUserUi::WordDocument::create_document(std::string caller)
-{
-    this->initialize();
-    try
-    {
-        //Word
-        pWordApp.CreateInstance(_uuidof(Word::Application));
-        //pWordApp->Visible = VARIANT_TRUE;
-        
-        dptr = this->pWordApp->Documents;
-        pDoc = dptr->Add();
-
-        p_Paras = pDoc->Paragraphs;
-        p_Para = p_Paras->Add();
-
-       
-        pDoc->ActiveWindow->Selection->InsertAfter("SALES REPORT\n");
-        paraformat = pDoc->ActiveWindow->Selection->ParagraphFormat;
-        paraformat->Alignment = Word::wdAlignParagraphCenter;
-
-        if (caller.compare("General Report") == 0)
-        {    
-            
-            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->seasons_data.c_str());
-
-            this->gr_window->age_groups_data = "\n" + this->gr_window->age_groups_data;
-            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->age_groups_data.c_str());
-
-            this->gr_window->genders_data = "\n" + this->gr_window->genders_data;
-            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->genders_data.c_str());
-
-            this->gr_window->locations_data = "\n" + this->gr_window->locations_data;
-            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->locations_data.c_str());
-
-            
-        }
-        else
-        {
-            pDoc->ActiveWindow->Selection->InsertAfter(this->cr_window->customized_data.c_str());
-        }
-
-        pDoc->Sentences->Item(1)->Font->Size = 16;
-        pDoc->Sentences->Item(1)->Bold = Word::wdToggle;
-
-        this->file_name += ".docx";
-        bstr_t nm = &this->file_name[0];
-        variant_t fname = nm;
-
-        pDoc->SaveAs(&fname);
-        pWordApp->DisplayAlerts = Word::wdAlertsNone;
-
-        this->uninitialize();
-    }
-    catch (_com_error& err)
-    {
-        printf("Word throws the error: %s\n", (char*)err.ErrorMessage());
-
-        printf("Description: %s\n", (LPCSTR)err.Description());
-    }
-    CoUninitialize();
-
-    return 1;
-}
+//MUserUi::WordDocument::WordDocument(GeneralReportWindow *gr_window, CustomizedReportWindow* cr_window)
+//{
+//    if (gr_window != NULL)
+//    {
+//        this->gr_window = gr_window;
+//        this->file_name = gr_window->file_name;
+//    }
+//       
+//    else
+//    {
+//        this->file_name = cr_window->file_name;
+//        this->cr_window = cr_window;
+//    }
+//
+//   
+//    
+//}
+//
+//void MUserUi::WordDocument::initialize()
+//{
+//    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+//}
+//
+//void MUserUi::WordDocument::uninitialize()
+//{
+//    pDoc->Close(&fls);
+//    pWordApp->Quit();
+//
+//    if(this->cr_window != NULL)
+//        this->cr_window->saving = false; //stop showing the saving indicator circle
+//    else
+//        this->gr_window->saving = false;
+//
+//}
+//
+//
+//int MUserUi::WordDocument::create_document(std::string caller)
+//{
+//    this->initialize();
+//    try
+//    {
+//        //Word
+//        pWordApp.CreateInstance(_uuidof(Word::Application));
+//        //pWordApp->Visible = VARIANT_TRUE;
+//        
+//        dptr = this->pWordApp->Documents;
+//        pDoc = dptr->Add();
+//
+//        p_Paras = pDoc->Paragraphs;
+//        p_Para = p_Paras->Add();
+//
+//       
+//        pDoc->ActiveWindow->Selection->InsertAfter("SALES REPORT\n");
+//        paraformat = pDoc->ActiveWindow->Selection->ParagraphFormat;
+//        paraformat->Alignment = Word::wdAlignParagraphCenter;
+//
+//        if (caller.compare("General Report") == 0)
+//        {    
+//            
+//            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->seasons_data.c_str());
+//
+//            this->gr_window->age_groups_data = "\n" + this->gr_window->age_groups_data;
+//            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->age_groups_data.c_str());
+//
+//            this->gr_window->genders_data = "\n" + this->gr_window->genders_data;
+//            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->genders_data.c_str());
+//
+//            this->gr_window->locations_data = "\n" + this->gr_window->locations_data;
+//            pDoc->ActiveWindow->Selection->InsertAfter(this->gr_window->locations_data.c_str());
+//
+//            
+//        }
+//        else
+//        {
+//            pDoc->ActiveWindow->Selection->InsertAfter(this->cr_window->customized_data.c_str());
+//        }
+//
+//        pDoc->Sentences->Item(1)->Font->Size = 16;
+//        pDoc->Sentences->Item(1)->Bold = Word::wdToggle;
+//
+//        this->file_name += ".docx";
+//        bstr_t nm = &this->file_name[0];
+//        variant_t fname = nm;
+//
+//        pDoc->SaveAs(&fname);
+//        pWordApp->DisplayAlerts = Word::wdAlertsNone;
+//
+//        this->uninitialize();
+//    }
+//    catch (_com_error& err)
+//    {
+//        printf("Word throws the error: %s\n", (char*)err.ErrorMessage());
+//
+//        printf("Description: %s\n", (LPCSTR)err.Description());
+//    }
+//    CoUninitialize();
+//
+//    return 1;
+//}
 
 MUserUi::GeneralReportWindow::GeneralReportWindow(mongocxx::database db, GLFWwindow* window)
 {
@@ -434,8 +434,8 @@ void MUserUi::GeneralReportWindow::create_doc()
 {   
     this->saving = true;
      
-    MUserUi::WordDocument wrd_win(this, NULL);
-    wrd_win.create_document("General Report");            
+    /*MUserUi::WordDocument wrd_win(this, NULL);
+    wrd_win.create_document("General Report");*/            
    
 }
 
@@ -671,7 +671,7 @@ void MUserUi::CustomizedReportWindow::create_custom_doc()
 {
     this->saving = true;
 
-    MUserUi::WordDocument wrd_win(NULL, this);
-    wrd_win.create_document("Customized Report");
+    /*MUserUi::WordDocument wrd_win(NULL, this);
+    wrd_win.create_document("Customized Report");*/
 
 }
