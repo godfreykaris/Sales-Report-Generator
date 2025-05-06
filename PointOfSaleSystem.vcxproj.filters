@@ -70,6 +70,21 @@
     <Filter Include="ui\ui_api\vendor\imgui\misc\fonts">
       <UniqueIdentifier>{907b12ce-e8ea-44e9-b6dd-14f848914c3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui\admin_ui\products">
+      <UniqueIdentifier>{6923c6de-841b-47aa-9b14-b25223fe0cbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\admin_ui\others">
+      <UniqueIdentifier>{11221ad1-e2fb-410f-bc4a-0481283022b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\admin_ui\agents">
+      <UniqueIdentifier>{0baf8e74-fa37-4c4b-b338-34489e8156ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\background">
+      <UniqueIdentifier>{e5236a8e-5b04-4a8a-9edf-c51a1eab1195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{63db6238-8695-497a-b17f-c0cd48f9c34a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="db\include\agent_sales.h">
@@ -189,6 +204,10 @@
     <ClInclude Include="server\server.h">
       <Filter>server</Filter>
     </ClInclude>
+    <ClInclude Include="ui\background\background_renderer.h">
+      <Filter>ui\background</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db\src\agent_sales.cpp">
@@ -229,9 +248,6 @@
     </ClCompile>
     <ClCompile Include="db\src\update_stock.cpp">
       <Filter>db\src</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\admin_ui\admin_ui.cpp">
-      <Filter>ui\admin_ui</Filter>
     </ClCompile>
     <ClCompile Include="ui\change_password_ui\change_password.cpp">
       <Filter>ui\change_password_ui</Filter>
@@ -279,6 +295,33 @@
       <Filter>server</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ui\admin_ui\others\admin_ui_others.cpp">
+      <Filter>ui\admin_ui\others</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\admin_ui_main.cpp">
+      <Filter>ui\admin_ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\agents\admin_ui_add_agents.cpp">
+      <Filter>ui\admin_ui\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\agents\admin_ui_remove_agents.cpp">
+      <Filter>ui\admin_ui\agents</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\products\admin_ui_brand.cpp">
+      <Filter>ui\admin_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\products\admin_ui_items.cpp">
+      <Filter>ui\admin_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\products\admin_ui_product.cpp">
+      <Filter>ui\admin_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\products\admin_ui_quantity.cpp">
+      <Filter>ui\admin_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\background\background_renderer.cpp">
+      <Filter>ui\background</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Cousine-Regular.ttf">
@@ -299,5 +342,17 @@
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Roboto-Medium.ttf">
       <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\background.jpg">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\icon.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="..\x64\Debug\assets\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
 </Project>

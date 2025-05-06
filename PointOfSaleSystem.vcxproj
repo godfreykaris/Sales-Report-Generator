@@ -71,19 +71,36 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
     <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+    <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2017;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCPMT.lib;MSVCPRTD.lib;LIBCMT.lib;MSVCRT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,14 +109,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCPMT.lib;MSVCPRTD.lib;LIBCMT.lib;MSVCRT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,6 +131,8 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,14 +149,20 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -151,8 +181,10 @@
     <ClInclude Include="db\include\new_docs.h" />
     <ClInclude Include="db\include\retrieve_data.h" />
     <ClInclude Include="db\include\update_stock.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="server\server.h" />
     <ClInclude Include="ui\admin_ui\admin_ui.h" />
+    <ClInclude Include="ui\background\background_renderer.h" />
     <ClInclude Include="ui\change_password_ui\change_password.h" />
     <ClInclude Include="ui\finance_ui\finance_ui.h" />
     <ClInclude Include="ui\login_ui\login_ui.h" />
@@ -192,7 +224,15 @@
     <ClCompile Include="db\src\update_stock.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="server\server.cpp" />
-    <ClCompile Include="ui\admin_ui\admin_ui.cpp" />
+    <ClCompile Include="ui\admin_ui\admin_ui_main.cpp" />
+    <ClCompile Include="ui\admin_ui\agents\admin_ui_add_agents.cpp" />
+    <ClCompile Include="ui\admin_ui\agents\admin_ui_remove_agents.cpp" />
+    <ClCompile Include="ui\admin_ui\others\admin_ui_others.cpp" />
+    <ClCompile Include="ui\admin_ui\products\admin_ui_brand.cpp" />
+    <ClCompile Include="ui\admin_ui\products\admin_ui_items.cpp" />
+    <ClCompile Include="ui\admin_ui\products\admin_ui_product.cpp" />
+    <ClCompile Include="ui\admin_ui\products\admin_ui_quantity.cpp" />
+    <ClCompile Include="ui\background\background_renderer.cpp" />
     <ClCompile Include="ui\change_password_ui\change_password.cpp" />
     <ClCompile Include="ui\finance_ui\finance_ui.cpp" />
     <ClCompile Include="ui\login_ui\login_ui.cpp" />
@@ -215,6 +255,20 @@
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyClean.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyTiny.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Roboto-Medium.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\x64\Debug\assets\icon.png" />
+    <Image Include="assets\background.jpg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="assets\icon.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

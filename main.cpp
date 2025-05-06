@@ -20,6 +20,9 @@
 #include "ui/regular_ui/regular_user_ui.h"
 #include "ui/change_password_ui/change_password.h"
 #include "server/server.h"
+#include "background/background_renderer.h"
+
+#include "ui/ui_dependences/stb_image/stb_image.h"
 
 // Global UI flags (defined in respective UI files)
 extern bool login_window;
@@ -52,6 +55,22 @@ int main(int, char**) {
         glfwTerminate();
         return -1;
     }
+
+    // Load icon image
+    int icon_width, icon_height, icon_channels;
+    unsigned char* icon_data = stbi_load("assets/icon.png", &icon_width, &icon_height, &icon_channels, 4); // Force RGBA
+    if (icon_data) {
+        GLFWimage icon;
+        icon.width = icon_width;
+        icon.height = icon_height;
+        icon.pixels = icon_data;
+        glfwSetWindowIcon(window, 1, &icon);
+        stbi_image_free(icon_data); // Free the image data
+    }
+    else {
+        std::cerr << "Failed to load icon: assets/app_icon.png" << std::endl;
+    }
+
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
 
@@ -124,10 +143,6 @@ int main(int, char**) {
     // Decide how to proceed if connection failed
     if (!db_connected) {
         std::cerr << "Application will run in limited mode without database access" << std::endl;
-        // Optionally, terminate the application:
-        // glfwDestroyWindow(window);
-        // glfwTerminate();
-        // return -1;
     }
 
     // Initialize TCP server in a separate thread
@@ -172,6 +187,9 @@ int main(int, char**) {
     RUserUi::AgentsWindow agents_ui(db);
     RUserUi::ShowRegularUserWindow regular_user_ui(stock_ui, sell_ui, return_sale_ui, agents_ui, change_password_ui);
 
+    // Initialize the BackgroundRenderer
+    BackgroundRenderer backgroundRenderer("assets/background.jpg");
+
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         // Poll and handle events
@@ -181,6 +199,22 @@ int main(int, char**) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+
+        // Clear the screen
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Clear to black
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Disable depth testing for 2D rendering
+        glDisable(GL_DEPTH_TEST);
+
+        // Render the gradient background
+        backgroundRenderer.render();
+
+        // Re-enable depth testing if needed for ImGui
+        glEnable(GL_DEPTH_TEST);
 
         // Show connection error in UI if not connected
         if (!db_connected) {
@@ -212,18 +246,13 @@ int main(int, char**) {
 
         // Render ImGui
         ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-        glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // Swap buffers
         glfwSwapBuffers(window);
     }
 
-    // Cleanup
+    // Cleanup (BackgroundRenderer cleanup is handled by its destructor)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
