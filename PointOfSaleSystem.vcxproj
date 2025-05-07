@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
-    <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>J:\vcpkg\installed\x64-windows\include\plutovg;J:\vcpkg\installed\x64-windows\include\plutosvg;J:\vcpkg\installed\x64-windows\include\lunasvg;J:\vcpkg\installed\x64-windows\include\freetype;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+    <LibraryPath>J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
-    <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2017;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>J:\vcpkg\installed\x64-windows\include\plutovg;J:\vcpkg\installed\x64-windows\include\plutosvg;J:\vcpkg\installed\x64-windows\include\lunasvg;J:\vcpkg\installed\x64-windows\include\freetype;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+    <LibraryPath>J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
@@ -200,6 +200,7 @@
     <ClInclude Include="ui\ui_api\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="ui\ui_api\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="ui\ui_api\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\misc\freetype\imgui_freetype.h" />
     <ClInclude Include="ui\ui_dependences\glew\include\eglew.h" />
     <ClInclude Include="ui\ui_dependences\glew\include\glew.h" />
     <ClInclude Include="ui\ui_dependences\glew\include\glxew.h" />
@@ -246,12 +247,23 @@
     <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="ui\ui_api\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="ui\ui_api\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="ui\ui_api\vendor\imgui\misc\freetype\imgui_freetype.cpp" />
     <ClCompile Include="ui\ui_dependences\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Font Include="assets\fonts\Cousine-Regular.ttf" />
+    <Font Include="assets\fonts\DroidSans.ttf" />
+    <Font Include="assets\fonts\Karla-Regular.ttf" />
+    <Font Include="assets\fonts\NotoColorEmoji-Regular.ttf" />
+    <Font Include="assets\fonts\ProggyClean.ttf" />
+    <Font Include="assets\fonts\ProggyTiny.ttf" />
+    <Font Include="assets\fonts\Roboto-Medium.ttf" />
+    <Font Include="assets\fonts\seguiemj.ttf" />
+    <Font Include="assets\fonts\TwitterColorEmoji-SVGinOT.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Cousine-Regular.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\DroidSans.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Karla-Regular.ttf" />
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\NotoColorEmoji-Regular.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyClean.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\ProggyTiny.ttf" />
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Roboto-Medium.ttf" />
@@ -262,13 +274,23 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </Image>
+    <Image Include="assets\icon.ico" />
     <Image Include="assets\icon.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ui\ui_api\vendor\imgui\.editorconfig" />
+    <None Include="ui\ui_api\vendor\imgui\.gitattributes" />
+    <None Include="ui\ui_api\vendor\imgui\.gitignore" />
+    <None Include="ui\ui_api\vendor\imgui\misc\freetype\README.md" />
     <ResourceCompile Include="resource.rc" />
+    <None Include="assets\icon.ico" />
+    <None Include="assets\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ui\ui_api\vendor\imgui\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -85,6 +85,12 @@
     <Filter Include="assets">
       <UniqueIdentifier>{63db6238-8695-497a-b17f-c0cd48f9c34a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui\ui_api\vendor\imgui\misc\freetype">
+      <UniqueIdentifier>{a0dddc8a-ae31-4d78-a536-e7ad61243a3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\fonts">
+      <UniqueIdentifier>{7a270b4b-7b72-4810-bf6e-1107fa60a27e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="db\include\agent_sales.h">
@@ -174,19 +180,17 @@
     <ClInclude Include="ui\regular_ui\regular_user_ui.h">
       <Filter>ui\regular_ui</Filter>
     </ClInclude>
+    <ClInclude Include="server\server.h">
+      <Filter>server</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\background\background_renderer.h">
+      <Filter>ui\background</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ui\ui_api\vendor\imgui\imconfig.h">
       <Filter>ui\ui_api\vendor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="ui\ui_api\vendor\imgui\imgui.h">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.h">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.h">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3_loader.h">
       <Filter>ui\ui_api\vendor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="ui\ui_api\vendor\imgui\imgui_internal.h">
@@ -201,13 +205,18 @@
     <ClInclude Include="ui\ui_api\vendor\imgui\imstb_truetype.h">
       <Filter>ui\ui_api\vendor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="server\server.h">
-      <Filter>server</Filter>
+    <ClInclude Include="ui\ui_api\vendor\imgui\misc\freetype\imgui_freetype.h">
+      <Filter>ui\ui_api\vendor\imgui\misc\freetype</Filter>
     </ClInclude>
-    <ClInclude Include="ui\background\background_renderer.h">
-      <Filter>ui\background</Filter>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3_loader.h">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db\src\agent_sales.cpp">
@@ -270,27 +279,6 @@
     <ClCompile Include="ui\regular_ui\regular_user_ui.cpp">
       <Filter>ui\regular_ui</Filter>
     </ClCompile>
-    <ClCompile Include="ui\ui_api\vendor\imgui\imgui.cpp">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_demo.cpp">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_draw.cpp">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.cpp">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.cpp">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_tables.cpp">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_widgets.cpp">
-      <Filter>ui\ui_api\vendor\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="server\server.cpp">
       <Filter>server</Filter>
     </ClCompile>
@@ -322,6 +310,30 @@
     <ClCompile Include="ui\background\background_renderer.cpp">
       <Filter>ui\background</Filter>
     </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_demo.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_draw.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_tables.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_widgets.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\misc\freetype\imgui_freetype.cpp">
+      <Filter>ui\ui_api\vendor\imgui\misc\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_glfw.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.cpp">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Cousine-Regular.ttf">
@@ -342,6 +354,36 @@
     <Font Include="ui\ui_api\vendor\imgui\misc\fonts\Roboto-Medium.ttf">
       <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
     </Font>
+    <Font Include="ui\ui_api\vendor\imgui\misc\fonts\NotoColorEmoji-Regular.ttf">
+      <Filter>ui\ui_api\vendor\imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Cousine-Regular.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\DroidSans.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Karla-Regular.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\NotoColorEmoji-Regular.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\ProggyClean.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\ProggyTiny.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Roboto-Medium.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\TwitterColorEmoji-SVGinOT.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\seguiemj.ttf">
+      <Filter>assets\fonts</Filter>
+    </Font>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\background.jpg">
@@ -351,8 +393,32 @@
       <Filter>assets</Filter>
     </Image>
     <Image Include="..\x64\Debug\assets\icon.png" />
+    <Image Include="assets\icon.ico">
+      <Filter>assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\icon.ico" />
+    <None Include="assets\icon.png" />
+    <None Include="ui\ui_api\vendor\imgui\.editorconfig">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </None>
+    <None Include="ui\ui_api\vendor\imgui\.gitattributes">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </None>
+    <None Include="ui\ui_api\vendor\imgui\.gitignore">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </None>
+    <None Include="ui\ui_api\vendor\imgui\misc\freetype\README.md">
+      <Filter>ui\ui_api\vendor\imgui\misc\freetype</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ui\ui_api\vendor\imgui\LICENSE.txt">
+      <Filter>ui\ui_api\vendor\imgui</Filter>
+    </Text>
   </ItemGroup>
 </Project>

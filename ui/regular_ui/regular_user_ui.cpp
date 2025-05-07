@@ -125,8 +125,8 @@ int RUserUi::ShowRegularUserWindow::create_show_regular_user_window()
     }*/
 
     // Change Password and Log Out buttons with distinct styling
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(255, 105, 180, 255)); // Pink for Change Password
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(220, 75, 150, 255));
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(220, 75, 150, 255)); // Pink for Change Password
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(255, 105, 180, 255));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(200, 130, 0, 255));
     ImGui::Dummy(ImVec2(0.0f, spacing));
     ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
@@ -221,7 +221,7 @@ int RUserUi::Window::create_listbox_filter(const std::string& items, const std::
 
     // Listbox
     label = "##Listbox_" + items_description;
-    if (ImGui::ListBoxHeader(label.c_str(), ImVec2(size.x - 10.0f, size.y - 80.0f))) { // Adjusted height
+    if (ImGui::BeginListBox(label.c_str(), ImVec2(size.x - 10.0f, size.y - 80.0f))) { // Adjusted height
         for (const auto& list_item : items_array) {
             if (ImGui::Selectable(list_item.c_str())) {
                 if (list_item != " ") {
@@ -232,7 +232,7 @@ int RUserUi::Window::create_listbox_filter(const std::string& items, const std::
                 }
             }
         }
-        ImGui::ListBoxFooter();
+        ImGui::EndListBox();
     }
 
     ImGui::PopStyleColor(6); // ChildBg, Text, FrameBg, FrameBgHovered, FrameBgActive, Border
@@ -740,11 +740,12 @@ int RUserUi::StockWindow::setup_stock_window()
 
     // Center and size the window (dynamic sizing)
     ImGuiIO& io = ImGui::GetIO();
-    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f - 400.0f, io.DisplaySize.y * 0.5f - 350.0f), ImGuiCond_Once);
-    ImGui::SetNextWindowSize(ImVec2(800.0f, 670.0f));
-    ImGui::SetNextWindowSizeConstraints(ImVec2(600.0f, 400.0f), ImVec2(io.DisplaySize.x, io.DisplaySize.y));
+    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f - 400.0f, 20.0f), ImGuiCond_Once, ImVec2(0.0f, 0.0f));
+    float maxHeight = io.DisplaySize.y - 40.0f; // Ensure height doesn't exceed display height minus top offset
+    ImGui::SetNextWindowSize(ImVec2(800.0f, (std::min)(670.0f, maxHeight)), ImGuiCond_Always);
+    ImGui::SetNextWindowSizeConstraints(ImVec2(600.0f, 400.0f), ImVec2(io.DisplaySize.x, maxHeight));
 
-    ImGui::Begin("Stock Inventory", &this->show_window, this->window_flags | ImGuiWindowFlags_NoMove);
+    ImGui::Begin("Stock Inventory", &this->show_window, this->window_flags);
 
     // Title
     ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);
@@ -1566,10 +1567,11 @@ int RUserUi::SellWindow::create_sell_window()
 
     // Center and size the window (increased height to fit all content)
     ImGuiIO& io = ImGui::GetIO();
-    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f - 260.0f, io.DisplaySize.y * 0.5f - 340.0f), ImGuiCond_Once);
-    ImGui::SetNextWindowSize(ImVec2(520.0f, 630.0f), ImGuiCond_Once); 
+    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f - 260.0f, 20.0f), ImGuiCond_Once, ImVec2(0.0f, 0.0f));
+    float maxHeight = io.DisplaySize.y - 40.0f; // Ensure height doesn't exceed display height minus top offset
+    ImGui::SetNextWindowSize(ImVec2(520.0f, (std::min)(630.0f, maxHeight)), ImGuiCond_Always);
 
-    ImGui::Begin("Create Sale", &this->show_window, this->window_flags | ImGuiWindowFlags_NoMove);
+    ImGui::Begin("Create Sale", &this->show_window, this->window_flags);
 
     // Title
     ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]); // Large font

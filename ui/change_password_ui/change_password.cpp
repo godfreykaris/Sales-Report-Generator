@@ -24,7 +24,7 @@ int PassWord::create_password_window()
 
 	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 	ImGui::SetNextWindowPos(center, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-	ImGui::SetNextWindowSize(ImVec2(400.0, 150.0), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(400.0, 200.0), ImGuiCond_Once);
 
 	ImGui::Begin("Change Password", &this->show_window, this->window_flags);
 
@@ -34,28 +34,38 @@ int PassWord::create_password_window()
 	if (this->password_success)
 		this->password_success_message(this->password_success);	//display the success message
 
-	ImGui::SameLine(50.0, 0.0);
-	ImGui::Text("Current Password: ");
+	// Use a table-like layout for alignment
+	const float label_width = 130.0f; // Fixed width for labels with extra space
+	const float input_width = 200.0f; // Fixed width for input fields
 
-	ImGui::SameLine(170.0, 0.0);
-	ImGui::SetNextItemWidth(150);
-	ImGui::PushID("Current Password");
-	ImGui::InputTextWithHint("###", "old password", this->c_old_password, IM_ARRAYSIZE(this->c_old_password));
-	ImGui::PopID();
+	// Current Password
+    ImGui::SetCursorPosY(50.0f); // Set Y position for first label
+    ImGui::Text("Current Password:");
+    ImGui::SameLine(label_width + 10.0f);
+	ImGui::SetCursorPosY(45.0f); 
+    ImGui::SetNextItemWidth(input_width);
+    ImGui::PushID("Current Password");
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f); // Add border to input field
+    ImGui::InputTextWithHint("##Current", "Enter current password", this->c_old_password, IM_ARRAYSIZE(this->c_old_password), ImGuiInputTextFlags_Password);
+    ImGui::PopStyleVar(); // Pop input field border
+    ImGui::PopID();
+
+    // New Password
+    ImGui::SetCursorPosY(100.0f); // Set Y position for second label
+    ImGui::Text("New Password:");
+    ImGui::SameLine(label_width + 10.0f);
+	ImGui::SetCursorPosY(95.0f); 
+    ImGui::SetNextItemWidth(input_width);
+    ImGui::PushID("New Password");
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f); // Add border to input field
+    ImGui::InputTextWithHint("##New", "Enter new password", this->c_new_password, IM_ARRAYSIZE(this->c_new_password), ImGuiInputTextFlags_Password);
+    ImGui::PopStyleVar(); // Pop input field border
+    ImGui::PopID();
 
 	ImGui::NewLine();
-	ImGui::SameLine(50.0, 0.0);
-	ImGui::Text("New Password    : ");
-
-	ImGui::SameLine(170.0, 0.0);
-	ImGui::SetNextItemWidth(150);
-	ImGui::PushID("New Password");
-	ImGui::InputTextWithHint("###", "new password", this->c_new_password, IM_ARRAYSIZE(this->c_new_password));
-	ImGui::PopID();
-
-	ImGui::NewLine();
-	ImGui::SameLine(120.0, 0.0);
-	if (ImGui::Button("Submit", ImVec2(145.0, 20.0)))
+	ImGui::SameLine(130.0, 0.0);
+	ImGui::SetCursorPosY(150.0f); 
+	if (ImGui::Button("Submit", ImVec2(135.0, 30.0)))
 	{
 		this->s_old_password = this->c_old_password;
 		memset(this->c_old_password, 0, 128);
@@ -107,8 +117,8 @@ int PassWord::password_success_message(bool& success_flag)
 	{
 		ImGui::Text("Password Changed!");
 		ImGui::Separator();
-
-		if (ImGui::Button("OK", ImVec2(90, 0)))
+		ImGui::SetCursorPosX(38.0f); 
+		if (ImGui::Button("OK", ImVec2(10, 0)))
 		{
 			success_flag = false;
 			ImGui::CloseCurrentPopup();
@@ -132,7 +142,7 @@ int PassWord::password_error_message(bool& error_flag)
 	{
 		ImGui::Text("Password Mismatch!");
 		ImGui::Separator();
-
+		ImGui::SetCursorPosX(38.0f); 
 		if (ImGui::Button("OK", ImVec2(90, 0)))
 		{
 			error_flag = false;
