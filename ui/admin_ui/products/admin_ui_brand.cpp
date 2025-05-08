@@ -16,17 +16,17 @@ char AdminUi::AddBrandWindow::c_n_brand_name[128] = "";
 
 int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, std::string& brand, std::vector<std::string>& quantities, std::vector<double>& selling_price, std::vector<double>& buying_price, std::vector<int>& number_of_items, std::string caller)
 {
-    ImVec2 size = ImVec2(300, 190);
+    ImVec2 size = ImVec2(300, 220);
     std::string label = "Add Brand";
     std::string quantity_caller = "Brand";
     if (caller.compare("Product") != 0)
     {
-        size = ImVec2(350, 400);
+        size = ImVec2(350, 450);
         label = "Add New Brand";
         quantity_caller = "New Brand";
     }
 
-    // Consistent styling with add_items_window
+    // Consistent styling
     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Near-white text
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.13f, 0.14f, 0.15f, 1.0f)); // Dark charcoal background
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 1.0f)); // Soft blue buttons
@@ -36,17 +36,19 @@ int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, s
     ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 150, 200, 128)); // Subtle blue border
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Rounded window corners
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f); // Rounded input/button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Comfortable padding
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f)); // Balanced spacing
 
-    // Center relative to parent and position to the right of add items window
-    ImVec2 parent_center = ImGui::GetMainViewport()->GetCenter();
-    ImVec2 add_items_size(340, 300);
-    float offset_x = add_items_size.x * 0.5f + size.x * 0.5f + 20.0f;
-    ImGui::SetNextWindowPos(ImVec2(parent_center.x + offset_x, parent_center.y), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+    // Center the window with +20.0f vertical offset
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 
-    ImGui::Begin(label.c_str(), &this->show_window, this->window_flags | ImGuiWindowFlags_NoCollapse);
+    // Begin window (movable, non-collapsible)
+    ImGui::Begin(label.c_str(), &this->show_window, ImGuiWindowFlags_NoCollapse);
+
+    //彼此
 
     // Title (centered)
     float title_width = ImGui::CalcTextSize(label.c_str()).x;
@@ -63,15 +65,17 @@ int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, s
     {
         ImGui::Text("Product:");
         ImGui::SameLine(label_width);
+        ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
         ImGui::SetNextItemWidth(input_width);
         this->mset_products();
-        this->create_listbox_filter(this->products, "Product", this->selected_product, '_', ImVec2(input_width, 200));
+        this->create_listbox_filter(this->products, "Product", this->selected_product, '_', ImVec2(input_width + 60, 200));
         ImGui::Dummy(ImVec2(0.0f, 15.0f));
     }
 
     // Brand Name input
     ImGui::Text("Brand Name:");
     ImGui::SameLine(label_width);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
     ImGui::SetNextItemWidth(input_width);
     if (caller.compare("Product") == 0)
         ImGui::InputTextWithHint("##BrandName", "name", this->c_brand_name, IM_ARRAYSIZE(this->c_brand_name));
@@ -189,7 +193,7 @@ int AdminUi::AddBrandWindow::create_add_brand_window(std::string product_name, s
     }
 
     ImGui::PopStyleColor(7); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border
-    ImGui::PopStyleVar(4); // WindowRounding, FrameRounding, FramePadding, ItemSpacing
+    ImGui::PopStyleVar(5); // WindowRounding, FrameRounding, FramePadding, ItemSpacing
     ImGui::End();
     return 1;
 }
@@ -204,91 +208,109 @@ AdminUi::RemoveBrandWindow::RemoveBrandWindow(mongocxx::database db)
 
 int AdminUi::RemoveBrandWindow::create_remove_brand_window()
 {
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+    // Apply consistent styling with AddBrandWindow
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Near-white text
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.13f, 0.14f, 0.15f, 1.0f)); // Dark charcoal background
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 1.0f)); // Soft blue buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.36f, 0.69f, 1.0f, 1.0f)); // Lighter blue on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20f, 0.49f, 0.88f, 1.0f)); // Darker blue when clicked
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(70, 70, 70, 255)); // Input field background
+    ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 150, 200, 128)); // Subtle blue border
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Rounded window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f); // Rounded input/button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Comfortable padding
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f)); // Balanced spacing
 
-	ImGui::SetNextWindowPos(ImVec2(400, 400), ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiCond_Once);
+    // Center the window with +20.0f vertical offset
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(380, 450), ImGuiCond_Always);
 
-	ImGui::Begin("Remove Brand", &this->show_window, this->window_flags);
+    // Begin window (movable, non-collapsible)
+    ImGui::Begin("Remove Brand", &this->show_window, ImGuiWindowFlags_NoCollapse);
 
-	
-	ImGui::SameLine(80.0, 0.0);
-	this->mset_products();
+    // Title (centered)
+    const char* title = "Remove Brand";
+    float title_width = ImGui::CalcTextSize(title).x;
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - title_width) * 0.5f);
+    ImGui::Text("%s", title);
+    ImGui::Separator();
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
 
-	this->create_listbox_filter(this->products, "Products", this->selected_product, '_', ImVec2(210, 150));
+    const ImVec2 filter_size = ImVec2(310.0f, 150.0f);
+    const float center_offset = (ImGui::GetWindowSize().x - filter_size.x) * 0.5f;
 
+    // Product list box
+    ImGui::SetCursorPosX(center_offset);
+    ImGui::Text("Select Product");
+    ImGui::SetCursorPosX(center_offset);
+    this->mset_products();
+    this->create_listbox_filter(this->products, "Products", this->selected_product, '_', filter_size);
 
-	ImVec2 combo_size = ImVec2(230, 50);
-	ImGui::NewLine();
+    // Brands combo
+    ImVec2 combo_size = ImVec2(230, 50);
+    ImGui::Dummy(ImVec2(0.0f, 10.0f));
+    if (this->selected_product.compare("All Products") != 0)
+    {
+        this->brands_array = get_product_brands_array(this->products_collection, this->selected_product);
+        mset_brands(this->brands_array);
+    }
+    else
+    {
+        this->brands = "Select_";
+    }
 
-	if (this->selected_product.compare("All Products") != 0)
-	{
-		this->brands_array = get_product_brands_array(this->products_collection, this->selected_product);
+    // Reallocate this->p_brands with new size
+    this->p_brands = std::make_unique<char[]>(this->brands.size() + 1);
+    std::fill(this->p_brands.get(), this->p_brands.get() + this->brands.size(), 0);
+    std::strncpy(this->p_brands.get(), this->brands.c_str(), this->brands.size() + 1);
+    this->prepare_items_pointer(this->brands, '_', this->p_brands);
 
-		mset_brands(this->brands_array);
-	}
-	else
-	{
-		this->brands = "Select_";
-	}
+    ImGui::Text("Brand:");
+    ImGui::SameLine(60.0f);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
+    create_combo(this->p_brands, "Brand", this->r_brand_current_item, combo_size);
 
-	// Reallocate this->p_brands with new size
-	this->p_brands = std::make_unique<char[]>(this->brands.size() + 1);
+    // Confirmation and error handling
+    if (this->confirm == this->ACCEPTED)
+    {
+        delete_brand(this->products_collection, this->stock, this->selected_product, this->brands_array[r_brand_current_item - 1]);
+        this->success = true;
+        this->show_confirm_window = false;
+        this->confirm = this->NONE;
+        this->selected_product = "All Products";
+        r_brand_current_item = 0;
+    }
+    else if (this->confirm == this->REJECTED)
+    {
+        this->show_confirm_window = false;
+        this->confirm = this->NONE;
+    }
 
-	// Clear the memory
-	std::fill(this->p_brands.get(), this->p_brands.get() + this->brands.size(), 0);
+    if (this->show_confirm_window == true)
+        this->admin_confirm_message(this->confirm);
+    else if (this->input_error)
+        this->admin_error_message(this->input_error);
 
-	// Copy the string
-	std::strncpy(this->p_brands.get(), this->brands.c_str(), this->brands.size() + 1);
+    // Remove button (centered)
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
+    float button_width = 120.0f;
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - button_width) * 0.5f);
+    if (ImGui::Button("Remove", ImVec2(button_width, 0)))
+    {
+        if (this->selected_product.compare("All Products") == 0 || r_brand_current_item == 0)
+        {
+            this->input_error = true;
+        }
+        else
+        {
+            this->show_confirm_window = true;
+        }
+    }
 
-	// Call prepare_items_pointer
-	this->prepare_items_pointer(this->brands, '_', this->p_brands);
-
-	ImGui::SameLine(60.0, 0.0);
-	create_combo(this->p_brands, "Brand", this->r_brand_current_item, combo_size);
-	
-	if (this->confirm == this->ACCEPTED)
-	{
-		delete_brand(this->products_collection, this->stock, this->selected_product, this->brands_array[r_brand_current_item - 1]);
-		
-		this->success = true;
-
-		this->show_confirm_window = false;
-		this->confirm = this->NONE;
-
-		this->selected_product = "All Products";
-		r_brand_current_item = 0;
-	}
-	else if (this->confirm == this->REJECTED)
-	{
-		this->show_confirm_window = false;
-		this->confirm = this->NONE;
-	}
-
-	if (this->show_confirm_window == true)
-		this->admin_confirm_message(this->confirm);
-	else if (this->input_error)
-		this->admin_error_message(this->input_error);
-		
-	
-	ImGui::Dummy(ImVec2(0.0, 10.0));
-	ImGui::NewLine();
-	ImGui::SameLine(70.0, 0.0);
-	if (ImGui::Button("Remove", ImVec2(120, 0)))
-	{
-		if (this->selected_product.compare("All Products") == 0  || r_brand_current_item == 0)
-		{	
-			this->input_error = true;
-			
-		}
-		else
-		{
-			this->show_confirm_window = true;
-		}				
-
-	}
-
-	ImGui::PopStyleColor();
-	ImGui::End();
-	return 1;
+    ImGui::PopStyleColor(7); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border
+    ImGui::PopStyleVar(5); // WindowRounding, FrameRounding, FrameBorderSize, FramePadding, ItemSpacing
+    ImGui::End();
+    return 1;
 }

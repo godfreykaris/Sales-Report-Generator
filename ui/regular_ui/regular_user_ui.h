@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "app_common.h"
 #include "change_password_ui/change_password.h"
+
 #include <mongocxx/collection.hpp>
 #include <mongocxx/database.hpp>
 
@@ -66,9 +67,18 @@ namespace RUserUi
     public:
         void prepare_items_pointer(const std::string& items, char item_separator, std::unique_ptr<char[]>& items_pointer);
         int display_all_products(bool show_low_stock = false, int low_stock_threshold = 0, bool show_out_of_stock = false);
-        int display_all_brands(const std::string& product, bool show_low_stock = false, int low_stock_threshold = 0, bool show_out_of_stock = false);
-        int display_brand_quantities(const std::string& product, const std::string& brand, bool show_low_stock = false, int low_stock_threshold = 0, bool show_out_of_stock = false);
-        int display_quantity(const std::string& product, const std::string& brand, const std::string& quantity, bool show_low_stock = false, int low_stock_threshold = 0, bool show_out_of_stock = false);
+        int display_all_brands(const std::string& product, bool show_low_stock, int low_stock_threshold, bool show_out_of_stock,
+            std::vector<std::tuple<std::string, std::string, std::string, int>>& print_data, bool& has_valid_items,
+            std::vector<int>& edited_remaining, std::vector<bool>& is_edited, size_t& row_index,
+            bool& show_success_popup, bool& show_failure_popup, bool& show_invalid_popup);
+int display_brand_quantities(const std::string& product, const std::string& brand, bool show_low_stock, int low_stock_threshold, bool show_out_of_stock,
+                 std::vector<std::tuple<std::string, std::string, std::string, int>>& print_data, bool& has_valid_items,
+                 std::vector<int>& edited_remaining, std::vector<bool>& is_edited, size_t& row_index,
+                 bool& show_success_popup, bool& show_failure_popup, bool& show_invalid_popup);
+int display_quantity(const std::string& product, const std::string& brand, const std::string& quantity, bool show_low_stock, int low_stock_threshold, bool show_out_of_stock,
+          std::vector<std::tuple<std::string, std::string, std::string, int>>& print_data, bool& has_valid_items,
+          std::vector<int>& edited_remaining, std::vector<bool>& is_edited, size_t& row_index,
+          bool& show_success_popup, bool& show_failure_popup, bool& show_invalid_popup);
         int set_products();
         int set_brands(const std::string& m_brands);
         int set_quantities(const std::string& m_quantities);
@@ -308,7 +318,7 @@ namespace RUserUi
         ReturnSaleWindow& return_sale_win;
         AgentsWindow& agents_win;
         PassWord& change_password;
-
+    
         bool show_window = false;
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
 

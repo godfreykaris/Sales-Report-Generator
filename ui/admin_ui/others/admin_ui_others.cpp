@@ -4,8 +4,6 @@
 #include "retrieve_data.h"
 #include "imgui_internal.h"
 
-
-
 AdminUi::AddOthersWindow::AddOthersWindow(mongocxx::database db)
 {
     this->products_collection = db["Products"];
@@ -22,27 +20,57 @@ char AdminUi::AddOthersWindow::other_name[128] = "";
 
 int AdminUi::AddOthersWindow::create_add_others_window()
 {
-    // Set dark theme background consistent with other windows
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+    // Professional styling
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.92f, 0.93f, 0.94f, 1.0f)); // Soft off-white text
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.15f, 0.16f, 0.18f, 1.0f)); // Deep slate gray background
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20f, 0.65f, 0.60f, 1.0f)); // Vibrant teal buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.30f, 0.75f, 0.70f, 1.0f)); // Lighter teal on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.15f, 0.55f, 0.50f, 1.0f)); // Darker teal when clicked
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(50, 50, 55, 255)); // Dark gray input field background
+    ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(80, 180, 180, 150)); // Soft cyan border
+    ImGui::PushStyleColor(ImGuiCol_Separator, IM_COL32(80, 80, 90, 255)); // Dim gray separator
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.18f, 0.19f, 0.21f, 1.0f)); // Slightly lighter slate for popups
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f); // Softer window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f); // Smoother input/button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.0f, 8.0f)); // Spacious padding
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0f, 10.0f)); // Balanced spacing
 
-    // Center window with responsive size
-    ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(ImVec2(300, 250), ImGuiCond_Once);
+    // Center the window with +20.0f vertical offset
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(320, 360), ImGuiCond_Always);
 
-    ImGui::Begin("Add Others", &this->show_window, this->window_flags | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    // Begin window (movable, non-collapsible, non-resizable)
+    ImGui::Begin("Add Others", &this->show_window, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+
+    // Title (centered)
+    const char* title = "Add Others";
+    float title_width = ImGui::CalcTextSize(title).x;
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - title_width) * 0.5f);
+    ImGui::Text("%s", title);
+    ImGui::Separator();
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
+
+    // Fixed label width for alignment
+    const float label_width = 100.0f;
+    const float input_width = 160.0f;
 
     // Entity type dropdown
-    ImGui::SetCursorPosX(40.0f);
-    ImVec2 combo_size = ImVec2(230, 50);
-    create_combo(this->p_others, "Others", this->others_current_item, combo_size);
+    ImGui::Text("Entity Type:");
+    ImGui::SameLine(label_width);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
+    ImGui::SetNextItemWidth(input_width);
+    create_combo(this->p_others, "Others", this->others_current_item, ImVec2(input_width, 0));
+
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
 
     // Name input
-    ImGui::Dummy(ImVec2(0.0f, 10.0f));
-    ImGui::SetCursorPosX(30.0f);
     ImGui::Text("Name:");
-    ImGui::SameLine(70.0f);
-    ImGui::SetNextItemWidth(150);
-    ImGui::InputTextWithHint("###other_name", "name", this->other_name, IM_ARRAYSIZE(this->other_name));
+    ImGui::SameLine(label_width);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
+    ImGui::SetNextItemWidth(input_width);
+    ImGui::InputTextWithHint("##OtherName", "name", this->other_name, IM_ARRAYSIZE(this->other_name));
 
     // Confirmation handling
     if (this->confirm == confirm_state::ACCEPTED)
@@ -79,10 +107,11 @@ int AdminUi::AddOthersWindow::create_add_others_window()
     else if (this->input_error)
         this->admin_error_message(this->input_error);
 
-    // Add button
-    ImGui::Dummy(ImVec2(0.0f, 10.0f));
-    ImGui::SetCursorPosX(70.0f);
-    if (ImGui::Button("Add", ImVec2(120, 0)))
+    // Add button (centered)
+    ImGui::Dummy(ImVec2(0.0f, 20.0f));
+    float button_width = 120.0f;
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - button_width) * 0.5f);
+    if (ImGui::Button("Add", ImVec2(button_width, 0)))
     {
         this->s_other_name = this->other_name;
         bool found_unwanted_char = check_unwanted_characters(this->s_other_name);
@@ -118,7 +147,8 @@ int AdminUi::AddOthersWindow::create_add_others_window()
         }
     }
 
-    ImGui::PopStyleColor();
+    ImGui::PopStyleColor(9); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border, Separator,  PopupBg
+    ImGui::PopStyleVar(5); // WindowRounding, FrameRounding, FrameBorderSize, FramePadding, ItemSpacing
     ImGui::End();
     return 1;
 }
@@ -143,17 +173,48 @@ int AdminUi::RemoveOthersWindow::r_other_selected_current_item = 0;
 
 int AdminUi::RemoveOthersWindow::create_remove_others_window()
 {
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+    // Professional styling
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.92f, 0.93f, 0.94f, 1.0f)); // Soft off-white text
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.15f, 0.16f, 0.18f, 1.0f)); // Deep slate gray background
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20f, 0.65f, 0.60f, 1.0f)); // Vibrant teal buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.30f, 0.75f, 0.70f, 1.0f)); // Lighter teal on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.15f, 0.55f, 0.50f, 1.0f)); // Darker teal when clicked
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(50, 50, 55, 255)); // Dark gray input field background
+    ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(80, 180, 180, 150)); // Soft cyan border
+    ImGui::PushStyleColor(ImGuiCol_Separator, IM_COL32(80, 80, 90, 255)); // Dim gray separator
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.18f, 0.19f, 0.21f, 1.0f)); // Slightly lighter slate for popups
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f); // Softer window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f); // Smoother input/button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.0f, 8.0f)); // Spacious padding
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0f, 10.0f)); // Balanced spacing
 
-    ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(ImVec2(300, 250), ImGuiCond_Once);
+    // Center the window with +20.0f vertical offset
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(320, 360), ImGuiCond_Always);
 
-    ImGui::Begin("Remove Others", &this->show_window, this->window_flags | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    // Begin window (movable, non-collapsible, non-resizable)
+    ImGui::Begin("Remove Others", &this->show_window, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+
+    // Title (centered)
+    const char* title = "Remove Others";
+    float title_width = ImGui::CalcTextSize(title).x;
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - title_width) * 0.5f);
+    ImGui::Text("%s", title);
+    ImGui::Separator();
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
+
+    // Fixed label width for alignment
+    const float label_width = 100.0f;
+    const float input_width = 160.0f;
 
     // Entity type dropdown
-    ImGui::SetCursorPosX(40.0f);
-    ImVec2 combo_size = ImVec2(230, 50);
-    create_combo(this->p_others, "Others", this->r_others_current_item, combo_size);
+    ImGui::Text("Entity Type:");
+    ImGui::SameLine(label_width);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
+    ImGui::SetNextItemWidth(input_width);
+    create_combo(this->p_others, "Others", this->r_others_current_item, ImVec2(input_width, 0));
 
     // Populate selected others based on entity type
     if (r_others_current_item != 0)
@@ -173,9 +234,14 @@ int AdminUi::RemoveOthersWindow::create_remove_others_window()
         this->prepare_items_pointer(this->selected_others, '_', this->p_selected_others);
     }
 
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
+
     // Selected other dropdown
-    ImGui::SetCursorPosX(40.0f);
-    create_combo(this->p_selected_others, "Other", this->r_other_selected_current_item, combo_size);
+    ImGui::Text("Entity Name:");
+    ImGui::SameLine(label_width);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
+    ImGui::SetNextItemWidth(input_width);
+    create_combo(this->p_selected_others, "Other", this->r_other_selected_current_item, ImVec2(input_width, 0));
 
     // Confirmation handling
     if (this->confirm == confirm_state::ACCEPTED)
@@ -205,10 +271,11 @@ int AdminUi::RemoveOthersWindow::create_remove_others_window()
     else if (this->input_error)
         this->admin_error_message(this->input_error);
 
-    // Remove button
-    ImGui::Dummy(ImVec2(0.0f, 10.0f));
-    ImGui::SetCursorPosX(70.0f);
-    if (ImGui::Button("Remove", ImVec2(120, 0)))
+    // Remove button (centered)
+    ImGui::Dummy(ImVec2(0.0f, 20.0f));
+    float button_width = 120.0f;
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - button_width) * 0.5f);
+    if (ImGui::Button("Remove", ImVec2(button_width, 0)))
     {
         if (r_others_current_item == 0 || r_other_selected_current_item == 0)
             this->input_error = true;
@@ -216,7 +283,8 @@ int AdminUi::RemoveOthersWindow::create_remove_others_window()
             this->show_confirm_window = true;
     }
 
-    ImGui::PopStyleColor();
+    ImGui::PopStyleColor(9); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border, Separator,  PopupBg
+    ImGui::PopStyleVar(5); // WindowRounding, FrameRounding, FrameBorderSize, FramePadding, ItemSpacing
     ImGui::End();
     return 1;
 }
@@ -237,40 +305,48 @@ AdminUi::AddorRemoveOthersWindow::AddorRemoveOthersWindow(AddOthersWindow& add_o
 
 int AdminUi::AddorRemoveOthersWindow::create_add_or_remove_others_window()
 {
-    // Consistent styling with other windows
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
-    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f));
-    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(50, 100, 255, 255));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(70, 120, 255, 255));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(90, 140, 255, 255));
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f));
+    // Professional styling
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.92f, 0.93f, 0.94f, 1.0f)); // Soft off-white text
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.15f, 0.16f, 0.18f, 1.0f)); // Deep slate gray background
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20f, 0.65f, 0.60f, 1.0f)); // Vibrant teal buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.30f, 0.75f, 0.70f, 1.0f)); // Lighter teal on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.15f, 0.55f, 0.50f, 1.0f)); // Darker teal when clicked
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(50, 50, 55, 255)); // Dark gray input field background
+    ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(80, 180, 180, 150)); // Soft cyan border
+    ImGui::PushStyleColor(ImGuiCol_Separator, IM_COL32(80, 80, 90, 255)); // Dim gray separator
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.18f, 0.19f, 0.21f, 1.0f)); // Slightly lighter slate for popups
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f); // Softer window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f); // Smoother input/button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(12.0f, 8.0f)); // Spacious padding
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0f, 10.0f)); // Balanced spacing
 
-    // Center window
-    ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(ImVec2(220, 250), ImGuiCond_Once);
+    // Center the window with +20.0f vertical offset
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(320, 250), ImGuiCond_Always);
 
-    ImGui::Begin("Add Or Remove Other", &this->show_window, this->window_flags | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    // Begin window (movable, non-collapsible, non-resizable)
+    ImGui::Begin("Manage Others", &this->show_window, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
     // Title (centered)
-    float title_width = ImGui::CalcTextSize("Manage Others").x;
+    const char* title = "Manage Others";
+    float title_width = ImGui::CalcTextSize(title).x;
     ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - title_width) * 0.5f);
-    ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.9f, 1.0f), "Manage Others");
+    ImGui::Text("%s", title);
     ImGui::Separator();
-    ImGui::Dummy(ImVec2(0.0f, 15.0f));
-
+   
     // Center buttons
-    float button_width = 145.0f;
+    float button_width = 140.0f;
     float window_width = ImGui::GetContentRegionAvail().x;
 
     ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
-    if (ImGui::Button("Add Other", ImVec2(button_width, 20.0f)))
+    if (ImGui::Button("Add Other", ImVec2(button_width, 0)))
         this->add_other->show_window = true;
 
     ImGui::Dummy(ImVec2(0.0f, 15.0f));
     ImGui::SetCursorPosX((window_width - button_width) * 0.5f);
-    if (ImGui::Button("Remove Other", ImVec2(button_width, 20.0f)))
+    if (ImGui::Button("Remove Other", ImVec2(button_width, 0)))
         this->remove_other->show_window = true;
 
     // Nested window calls
@@ -294,11 +370,8 @@ int AdminUi::AddorRemoveOthersWindow::create_add_or_remove_others_window()
         this->remove_other->success = false;
     }
 
-    // Pop styles
-    ImGui::PopStyleColor(5); // WindowBg, Text, Button, ButtonHovered, ButtonActive
-    ImGui::PopStyleVar(3);   // WindowRounding, FrameRounding, FramePadding
+    ImGui::PopStyleColor(9); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border, Separator, PopupBg
+    ImGui::PopStyleVar(5); // WindowRounding, FrameRounding, FrameBorderSize, FramePadding, ItemSpacing
     ImGui::End();
-
     return 1;
 }
-

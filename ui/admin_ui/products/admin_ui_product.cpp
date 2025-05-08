@@ -32,23 +32,30 @@ int AdminUi::AddProductWindow::create_add_product_window()
     if (ImGui::BeginTable("product_input_table", 2, ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_PadOuterX))
     {
         // Set column widths: fixed for label, stretch for input
-        ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 120.0f); // Increased width for better fit
+        ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 130.0f); // Increased label width to balance larger input
         ImGui::TableSetupColumn("Input", ImGuiTableColumnFlags_WidthStretch);
-    
+
         ImGui::TableNextRow();
         ImGui::TableSetColumnIndex(0);
         // Vertically center the label
         ImGui::SetCursorPosY(ImGui::GetCursorPosY() + (ImGui::GetTextLineHeightWithSpacing() - ImGui::GetTextLineHeight()) * 0.5f);
         ImGui::Text("Product Name");
-        
+
         ImGui::TableSetColumnIndex(1);
-        // Set input field width to avoid over-stretching, with padding
-        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 10.0f); // Leave some padding
+        // Set input field width to be wider, with padding
+        ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 5.0f); // Reduced padding for wider input
+
+        // Add border and increase input field size
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f); // Enable border
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5.0f, 8.0f)); // Increase height via padding (taller input)
+        ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(70, 70, 70, 255)); // Input field background
+        ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 150, 200, 128)); // Subtle blue border
         ImGui::InputTextWithHint("###product_name", "Enter name", this->c_product_name, IM_ARRAYSIZE(this->c_product_name));
-    
+        ImGui::PopStyleColor(2); // Pop FrameBg, Border, BorderHovered, BorderActive
+        ImGui::PopStyleVar(2); // Pop FrameBorderSize, FramePadding
+
         ImGui::EndTable();
     }
-
     // Handle errors
     if (this->input_error == true)
         this->admin_error_message(this->input_error);
@@ -174,15 +181,20 @@ int AdminUi::RemoveProductWindow::create_remove_product_window()
 {	
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
 
-	ImGui::SetNextWindowPos(ImVec2(400, 350), ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(350, 300), ImGuiCond_Once);
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(300, 360), ImGuiCond_Once);
 
 	ImGui::Begin("Remove Product", &this->show_window, this->window_flags);
 
-	ImGui::NewLine();
-	ImGui::SameLine(80.0, 0.0);
+    const ImVec2 filter_size = ImVec2(210.0f, 200.0f);
+    const float center_offset = (ImGui::GetWindowSize().x - filter_size.x) * 0.5f;
+    // Product list box
+    ImGui::SetCursorPosX(center_offset);
+    ImGui::Text("Select Product");
+    ImGui::SetCursorPosX(center_offset);
 	this->mset_products();
-	this->create_listbox_filter(this->products, "Product", this->selected_product, '_', ImVec2(210, 150));
+	this->create_listbox_filter(this->products, "Product", this->selected_product, '_', filter_size);
 		
 	if (this->confirm == this->ACCEPTED)
 	{

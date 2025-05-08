@@ -22,109 +22,148 @@ AdminUi::ShowAdminWindow::ShowAdminWindow(AddorRemoveItemWindow& add_or_remove_i
 
 int AdminUi::ShowAdminWindow::create_show_admin_window()
 {
+    // Apply modern styling
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(40, 40, 40, 255)); // Dark gray background
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(60, 60, 60, 255)); // Input field background
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, IM_COL32(80, 80, 80, 255)); // Input hover
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(100, 100, 100, 255)); // Input active
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(0, 150, 80, 255)); // Green button
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(0, 180, 100, 255)); // Lighter green on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(0, 120, 60, 255)); // Darker green when clicked
+    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(200, 200, 200, 255)); // Light gray text
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Rounded window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f); // Rounded button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(15.0f, 15.0f)); // Consistent padding
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5.0f, 5.0f)); // Button/input padding
+
+    // Center and size the window
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(ImVec2(350.0f, 450.0f), ImGuiCond_Always); // Adjusted size for all buttons
+
+    // Begin window
+	ImGui::Begin("Admin Dashboard", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+
+    // Title
+    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]); // Assuming large font at index 1
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize("Admin Dashboard").x) * 0.5f);
+    ImGui::TextColored(ImVec4(0.0f, 0.8f, 0.4f, 1.0f), "Admin Dashboard");
+    ImGui::PopFont();
+    ImGui::Separator();
+
+    // Button layout (centered, evenly spaced)
+    const float button_width = 150.0f;
+    const float button_height = 30.0f;
+    const float spacing = 10.0f;
+
+    if (!showing_admin_extensions)
+    {
+        // Products button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Products", ImVec2(button_width, button_height)))
+            this->add_or_remove_item->show_window = true;
+
+        if (this->add_or_remove_item->show_window)
+            this->add_or_remove_item->create_add_or_remove_items_window();
+
+        // Others button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Others", ImVec2(button_width, button_height)))
+            this->add_or_remove_others->show_window = true;
+
+        if (this->add_or_remove_others->show_window)
+            this->add_or_remove_others->create_add_or_remove_others_window();
+
+		ImGui::Separator();
+
+        // // Agents button
+        // ImGui::Dummy(ImVec2(0.0f, spacing));
+        // ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        // if (ImGui::Button("Agents", ImVec2(button_width, button_height)))
+        //     this->add_or_remove_agents->show_window = true;
+
+        // if (this->add_or_remove_agents->show_window)
+        //     this->add_or_remove_agents->create_add_or_remove_agents_window();
+    }
 	
-	if (showing_admin_extensions == false)
-	{
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Products", ImVec2(115.0, 20.0)))
-			this->add_or_remove_item->show_window = true;
 
-		if (this->add_or_remove_item->show_window)
-			this->add_or_remove_item->create_add_or_remove_items_window();
+    if (finance_window || marketer_window || regular_user_window)
+    {
+        showing_admin_extensions = true;
+    }
 
+    if (!finance_window && !marketer_window && !regular_user_window)
+    {
+        // Finance button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Finance", ImVec2(button_width, button_height)))
+            finance_window = true;
 
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Others", ImVec2(115.0, 20.0)))
-			this->add_or_remove_others->show_window = true;
+        // Reports button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Reports", ImVec2(button_width, button_height)))
+            marketer_window = true;
 
-		if (this->add_or_remove_others->show_window)
-			this->add_or_remove_others->create_add_or_remove_others_window();
+        // Regular button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Regular", ImVec2(button_width, button_height)))
+            regular_user_window = true;
 
+		ImGui::Separator();
 
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Agents", ImVec2(115.0, 20.0)))
-			this->add_or_remove_agents->show_window = true;
+        // Change Password button (Pink)
+        ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(220, 75, 150, 255)); // Pink
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(255, 105, 180, 255));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(200, 130, 0, 255));
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Change Password", ImVec2(button_width, button_height)))
+            this->change_password->show_window = true;
 
-		if (this->add_or_remove_agents->show_window)
-			this->add_or_remove_agents->create_add_or_remove_agents_window();
-	}
-	
-
-	if (finance_window != true && marketer_window != true && regular_user_window != true)
-	{
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Finance", ImVec2(115.0, 20.0)))
-			finance_window = true;
-
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Reports", ImVec2(115.0, 20.0)))
-			marketer_window = true;
-
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Regular", ImVec2(115.0, 20.0)))
-			regular_user_window = true;
-
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(6 / 7.0f, 0.6f, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(6 / 7.0f, 0.7f, 0.7f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(6 / 7.0f, 0.8f, 0.8f));	
+        if (this->change_password->show_window)
+            this->change_password->create_password_window();
 		
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Log Out", ImVec2(115.0, 20.0)))
-		{
-			login_window = true;
-			admin_window = false;
-			showing_admin_extensions = false;
-		}
-			
 		ImGui::PopStyleColor(3);
 
-		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.8f / 7.0f, 0.6f, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.8f / 7.0f, 0.7f, 0.7f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.8f / 7.0f, 0.8f, 0.8f));
+        // Log Out button (Red)
+        ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(220, 50, 50, 255)); // Red
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(255, 80, 80, 255));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(180, 30, 30, 255));
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Log Out", ImVec2(button_width, button_height)))
+        {
+            login_window = true;
+            admin_window = false;
+            showing_admin_extensions = false;
+        }
+        ImGui::PopStyleColor(3);
+    }
 
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Change Password", ImVec2(115.0, 20.0)))
-			this->change_password->show_window = true;
-		ImGui::PopStyleColor(3);
+    if (showing_admin_extensions)
+    {
+        // Back button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Back To Admin", ImVec2(button_width, button_height)))
+        {
+            showing_admin_extensions = false;
+            finance_window = false;
+            marketer_window = false;
+            regular_user_window = false;
+        }
+    }
 
-		if (this->change_password->show_window)
-			this->change_password->create_password_window();
+    ImGui::End();
 
-		
-	}
-	else
-		showing_admin_extensions = true;
+    // Pop styles
+    ImGui::PopStyleColor(8);
+    ImGui::PopStyleVar(4);
 
-	if (showing_admin_extensions == true)
-	{
-		ImGui::Dummy(ImVec2(0.0, 10.0));
-		ImGui::NewLine();
-		ImGui::SameLine(50.0, 0.0);
-		if (ImGui::Button("Back", ImVec2(115.0, 20.0)))
-		{
-			showing_admin_extensions = false;
-			finance_window = false;
-			marketer_window = false;
-			regular_user_window = false;
-		}
-	}
-
-
-	return 1;
+    return 1;
 }

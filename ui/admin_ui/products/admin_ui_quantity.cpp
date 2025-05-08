@@ -28,22 +28,34 @@ int AdminUi::AddQuantityWindow::create_add_quantity_window(std::string& quantity
     }
     else if (caller.compare("New Quantity") == 0)
     {
-        size = ImVec2(400, 500);
+        size = ImVec2(320, 580);
         label = "Add New Quantity ";
     }
 
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Near-white text
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.13f, 0.14f, 0.15f, 1.0f)); // Dark charcoal background
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 1.0f)); // Soft blue buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.36f, 0.69f, 1.0f, 1.0f)); // Lighter blue on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20f, 0.49f, 0.88f, 1.0f)); // Darker blue when clicked
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(70, 70, 70, 255)); // Input field background
+    ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 150, 200, 128)); // Subtle blue border
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Rounded window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f); // Rounded input/button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Comfortable padding
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f)); // Balanced spacing
 
-    ImGui::SetNextWindowPos(ImVec2(400, 400), ImGuiCond_Once);
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(size, ImGuiCond_Once);
 
     ImGui::Begin(label.c_str(), &this->show_window, this->window_flags);
 
     if (caller.compare("New Quantity") == 0)
     {
-        ImGui::SameLine(120.0, 0.0);
+        ImGui::SameLine(30.0, 0.0);
         this->mset_products();
-        this->create_listbox_filter(this->products, "Products", this->selected_product, '_', ImVec2(210, 150));
+        this->create_listbox_filter(this->products, "Product", this->selected_product, '_', ImVec2(250, 150));
 
         ImVec2 combo_size = ImVec2(230, 50);
 
@@ -71,11 +83,10 @@ int AdminUi::AddQuantityWindow::create_add_quantity_window(std::string& quantity
         create_combo(this->p_brands, "Brand", this->a_current_brand_index, combo_size);
     }
 
-    ImGui::Dummy(ImVec2(0.0, 10.0));
     ImGui::NewLine();
     ImGui::Text("Quantity Name: ");
 
-    ImGui::SameLine(100.0, 0.0);
+    ImGui::SameLine(120.0, 0.0);
     ImGui::SetNextItemWidth(150);
 
     if (caller.compare("Brand") == 0)
@@ -88,7 +99,7 @@ int AdminUi::AddQuantityWindow::create_add_quantity_window(std::string& quantity
     ImGui::NewLine();
     ImGui::Text("Buying Price: ");
 
-    ImGui::SameLine(100.0, 0.0);
+    ImGui::SameLine(120.0, 0.0);
     ImGui::SetNextItemWidth(150);
 
     ImGui::PushID("buying price");
@@ -98,7 +109,7 @@ int AdminUi::AddQuantityWindow::create_add_quantity_window(std::string& quantity
     ImGui::NewLine();
     ImGui::Text("Selling Price: ");
 
-    ImGui::SameLine(100.0, 0.0);
+    ImGui::SameLine(120.0, 0.0);
     ImGui::SetNextItemWidth(150);
 
     ImGui::PushID("selling price");
@@ -108,7 +119,7 @@ int AdminUi::AddQuantityWindow::create_add_quantity_window(std::string& quantity
     ImGui::NewLine();
     ImGui::Text("Number: ");
 
-    ImGui::SameLine(100.0, 0.0);
+    ImGui::SameLine(120.0, 0.0);
     ImGui::SetNextItemWidth(150);
 
     ImGui::InputInt("##", &this->amount, 0);
@@ -163,7 +174,8 @@ int AdminUi::AddQuantityWindow::create_add_quantity_window(std::string& quantity
         }
     }
 
-    ImGui::PopStyleColor();
+    ImGui::PopStyleColor(7); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border
+    ImGui::PopStyleVar(5); // WindowRounding, FrameRounding, FramePadding, ItemSpacing
     ImGui::End();
     return 1;
 }
@@ -313,17 +325,29 @@ AdminUi::RemoveQuantityWindow::RemoveQuantityWindow(mongocxx::database db)
 
 int AdminUi::RemoveQuantityWindow::create_remove_quantity_window()
 {
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(60, 60, 60, 255));
+	ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.95f, 0.95f, 0.95f, 1.0f)); // Near-white text
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.13f, 0.14f, 0.15f, 1.0f)); // Dark charcoal background
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.26f, 0.59f, 0.98f, 1.0f)); // Soft blue buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.36f, 0.69f, 1.0f, 1.0f)); // Lighter blue on hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.20f, 0.49f, 0.88f, 1.0f)); // Darker blue when clicked
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(70, 70, 70, 255)); // Input field background
+    ImGui::PushStyleColor(ImGuiCol_Border, IM_COL32(100, 150, 200, 128)); // Subtle blue border
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f); // Rounded window corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 6.0f); // Rounded input/button corners
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 6.0f)); // Comfortable padding
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 8.0f)); // Balanced spacing
 
-	ImGui::SetNextWindowPos(ImVec2(400, 400), ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(350, 400), ImGuiCond_Once);
+	ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 20.0f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowSize(ImVec2(380, 450), ImGuiCond_Once);
 
 	ImGui::Begin("Remove Quantity", &this->show_window, this->window_flags);
 
 
 	ImGui::SameLine(70.0, 0.0);
 	this->mset_products();
-	this->create_listbox_filter(this->products, "Products", this->selected_product, '_', ImVec2(210, 150));
+	this->create_listbox_filter(this->products, "Selected Product", this->selected_product, '_', ImVec2(240, 200));
 		
 
 	if (this->selected_product.compare("All Products") != 0)
@@ -362,7 +386,9 @@ int AdminUi::RemoveQuantityWindow::create_remove_quantity_window()
 
 	ImVec2 combo_size = ImVec2(230, 50);
 	ImGui::NewLine();
-	ImGui::SameLine(60.0, 0.0);
+    ImGui::Text("Brand:");
+	ImGui::SameLine(80.0, 0.0);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
 	create_combo(this->p_brands, "Brand", this->r_quantity_brand_current_item, combo_size);
 	
 	// Reallocate this->p_quantities with new size
@@ -378,7 +404,9 @@ int AdminUi::RemoveQuantityWindow::create_remove_quantity_window()
 	this->prepare_items_pointer(this->quantities, '_', this->p_quantities);
 
 	ImGui::NewLine();
-	ImGui::SameLine(60.0, 0.0);
+    ImGui::Text("Quantity:");
+	ImGui::SameLine(80.0, 0.0);
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.0f);
 	create_combo(this->p_quantities, "Quantity", this->r_quantity_current_item, combo_size);
 
 	if (this->confirm == this->ACCEPTED)
@@ -423,7 +451,8 @@ int AdminUi::RemoveQuantityWindow::create_remove_quantity_window()
 
 	}
 
-	ImGui::PopStyleColor();
+	ImGui::PopStyleColor(7); // Text, WindowBg, Button, ButtonHovered, ButtonActive, FrameBg, Border
+    ImGui::PopStyleVar(5); // WindowRounding, FrameRounding, FramePadding, ItemSpacing
 	ImGui::End();
 	return 1;
 }
