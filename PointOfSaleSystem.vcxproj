@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>J:\vcpkg\installed\x64-windows\include\plutovg;J:\vcpkg\installed\x64-windows\include\plutosvg;J:\vcpkg\installed\x64-windows\include\lunasvg;J:\vcpkg\installed\x64-windows\include\freetype;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\regular_ui;J:\vcpkg\installed\x64-windows\include\plutovg;J:\vcpkg\installed\x64-windows\include\plutosvg;J:\vcpkg\installed\x64-windows\include\lunasvg;J:\vcpkg\installed\x64-windows\include\freetype;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
     <LibraryPath>J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>J:\vcpkg\installed\x64-windows\include\plutovg;J:\vcpkg\installed\x64-windows\include\plutosvg;J:\vcpkg\installed\x64-windows\include\lunasvg;J:\vcpkg\installed\x64-windows\include\freetype;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
+    <IncludePath>J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\regular_ui;J:\vcpkg\installed\x64-windows\include\plutovg;J:\vcpkg\installed\x64-windows\include\plutosvg;J:\vcpkg\installed\x64-windows\include\lunasvg;J:\vcpkg\installed\x64-windows\include\freetype;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\admin_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\x64\Debug;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\change_password_ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\Report;J:\source\PointOfSaleSystem\PointOfSaleSystem\db\include;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_api\vendor\imgui;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\include;J:\vcpkg\installed\x64-windows\include\bsoncxx\v_noabi;J:\vcpkg\installed\x64-windows\include\mongocxx\v_noabi;$(IncludePath)</IncludePath>
     <LibraryPath>J:\vcpkg\installed\x64-windows\lib;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glfw\lib-vc2019\x64;J:\source\PointOfSaleSystem\PointOfSaleSystem\ui\ui_dependences\glew\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -184,6 +184,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="server\server.h" />
     <ClInclude Include="ui\admin_ui\admin_ui.h" />
+    <ClInclude Include="ui\admin_ui\db\admin_ui_db_management.h" />
     <ClInclude Include="ui\background\background_renderer.h" />
     <ClInclude Include="ui\change_password_ui\change_password.h" />
     <ClInclude Include="ui\finance_ui\finance_ui.h" />
@@ -228,17 +229,18 @@
     <ClCompile Include="ui\admin_ui\admin_ui_main.cpp" />
     <ClCompile Include="ui\admin_ui\agents\admin_ui_add_agents.cpp" />
     <ClCompile Include="ui\admin_ui\agents\admin_ui_remove_agents.cpp" />
-    <ClCompile Include="ui\admin_ui\others\admin_ui_others.cpp" />
-    <ClCompile Include="ui\admin_ui\products\admin_ui_brand.cpp" />
-    <ClCompile Include="ui\admin_ui\products\admin_ui_items.cpp" />
-    <ClCompile Include="ui\admin_ui\products\admin_ui_product.cpp" />
-    <ClCompile Include="ui\admin_ui\products\admin_ui_quantity.cpp" />
+    <ClCompile Include="ui\admin_ui\db\admin_ui_db_management.cpp" />
     <ClCompile Include="ui\background\background_renderer.cpp" />
     <ClCompile Include="ui\change_password_ui\change_password.cpp" />
     <ClCompile Include="ui\finance_ui\finance_ui.cpp" />
     <ClCompile Include="ui\login_ui\login_ui.cpp" />
     <ClCompile Include="ui\marketer_ui\marketer_ui.cpp" />
     <ClCompile Include="ui\marketer_ui\stdafx.cpp" />
+    <ClCompile Include="ui\regular_ui\others\regular_ui_others.cpp" />
+    <ClCompile Include="ui\regular_ui\products\regular_ui_brand.cpp" />
+    <ClCompile Include="ui\regular_ui\products\regular_ui_items.cpp" />
+    <ClCompile Include="ui\regular_ui\products\regular_ui_product.cpp" />
+    <ClCompile Include="ui\regular_ui\products\regular_ui_quantity.cpp" />
     <ClCompile Include="ui\regular_ui\regular_user_ui.cpp" />
     <ClCompile Include="ui\ui_api\vendor\imgui\imgui.cpp" />
     <ClCompile Include="ui\ui_api\vendor\imgui\imgui_demo.cpp" />
@@ -281,6 +283,14 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\bin\bsondump.exe" />
+    <None Include="assets\bin\mongodump.exe" />
+    <None Include="assets\bin\mongoexport.exe" />
+    <None Include="assets\bin\mongofiles.exe" />
+    <None Include="assets\bin\mongoimport.exe" />
+    <None Include="assets\bin\mongorestore.exe" />
+    <None Include="assets\bin\mongostat.exe" />
+    <None Include="assets\bin\mongotop.exe" />
     <None Include="ui\ui_api\vendor\imgui\.editorconfig" />
     <None Include="ui\ui_api\vendor\imgui\.gitattributes" />
     <None Include="ui\ui_api\vendor\imgui\.gitignore" />

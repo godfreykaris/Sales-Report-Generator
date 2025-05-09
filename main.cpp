@@ -313,23 +313,24 @@ int main(int, char**) {
 
     // Initialize UI components (restored as original)
     LoginUi::LoginWindow login_ui(db, default_font, large_font, emoji_font, backgroundRenderer);
-    AdminUi::AddProductWindow add_product_ui(db);
-    AdminUi::AddNewBrandWindow add_new_brand_ui(db);
-    AdminUi::AddNewQuantityWindow add_new_quantity_ui(db);
-    AdminUi::AddItemWindow add_item_ui(add_product_ui, add_new_brand_ui, add_new_quantity_ui);
-    AdminUi::RemoveProductWindow remove_product_ui(db);
-    AdminUi::RemoveBrandWindow remove_brand_ui(db);
-    AdminUi::RemoveQuantityWindow remove_quantity_ui(db);
-    AdminUi::RemoveItemWindow remove_item_ui(remove_product_ui, remove_brand_ui, remove_quantity_ui);
-    AdminUi::AddorRemoveItemWindow add_or_remove_item_ui(add_item_ui, remove_item_ui);
-    AdminUi::AddOthersWindow add_others_ui(db);
-    AdminUi::RemoveOthersWindow remove_others_ui(db);
-    AdminUi::AddorRemoveOthersWindow add_or_remove_others_ui(add_others_ui, remove_others_ui);
+    RUserUi::AddProductWindow add_product_ui(db);
+    RUserUi::AddNewBrandWindow add_new_brand_ui(db);
+    RUserUi::AddNewQuantityWindow add_new_quantity_ui(db);
+    RUserUi::AddItemWindow add_item_ui(add_product_ui, add_new_brand_ui, add_new_quantity_ui);
+    RUserUi::RemoveProductWindow remove_product_ui(db);
+    RUserUi::RemoveBrandWindow remove_brand_ui(db);
+    RUserUi::RemoveQuantityWindow remove_quantity_ui(db);
+    RUserUi::RemoveItemWindow remove_item_ui(remove_product_ui, remove_brand_ui, remove_quantity_ui);
+    RUserUi::AddorRemoveItemWindow add_or_remove_item_ui(add_item_ui, remove_item_ui);
+    RUserUi::AddOthersWindow add_others_ui(db);
+    RUserUi::RemoveOthersWindow remove_others_ui(db);
+    RUserUi::AddorRemoveOthersWindow add_or_remove_others_ui(add_others_ui, remove_others_ui);
     AdminUi::AddAgentWindow add_agent_ui(db);
     AdminUi::RemoveAgentWindow remove_agent_ui(db);
     AdminUi::AddorRemoveAgentsWindow add_or_remove_agents_ui(add_agent_ui, remove_agent_ui);
     PassWord change_password_ui(db);
-    AdminUi::ShowAdminWindow admin_ui(add_or_remove_item_ui, add_or_remove_others_ui, add_or_remove_agents_ui, change_password_ui);
+    AdminUi::DBManagementWindow db_management(db);
+    AdminUi::ShowAdminWindow admin_ui(add_or_remove_agents_ui, change_password_ui, db_management);
 
     FUserUi::Profit_Loss_Window profit_loss_ui(db);
     FUserUi::AddExpenseWindow add_expense_ui(db);
@@ -347,7 +348,7 @@ int main(int, char**) {
     RUserUi::SellWindow sell_ui(db);
     RUserUi::ReturnSaleWindow return_sale_ui(db);
     RUserUi::AgentsWindow agents_ui(db);
-    RUserUi::ShowRegularUserWindow regular_user_ui(stock_ui, sell_ui, return_sale_ui, agents_ui, change_password_ui);
+    RUserUi::ShowRegularUserWindow regular_user_ui(stock_ui, sell_ui, return_sale_ui, agents_ui, change_password_ui, add_or_remove_item_ui, add_or_remove_others_ui);
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {

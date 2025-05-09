@@ -1,0 +1,40 @@
+Export Command: ".\assets\bin\mongodump.exe" --db "inventory_db" --out "C:\Users\admin\Desktop\dbs"
+Current Working Directory: J:\source\PointOfSaleSystem\PointOfSaleSystem
+Export Command: "J:\source\PointOfSaleSystem\PointOfSaleSystem\assets\bin\mongodump.exe" --db "inventory_db" --out "C:\Users\admin\Desktop\dbs"
+Database Name: inventory_db
+Output Path: C:\Users\admin\Desktop\dbs
+Warning: Application is not running with admin privileges.
+Current Working Directory: J:\source\PointOfSaleSystem\PointOfSaleSystem
+Created output folder: C:\Users\admin\Desktop\dbs
+Export Command: "J:\source\PointOfSaleSystem\PointOfSaleSystem\assets\bin\mongodump.exe" --db "inventory_db" --out "C:\Users\admin\Desktop\dbs" > "mongodump_output.txt" 2>&1
+Database Name: inventory_db
+Output Path: C:\Users\admin\Desktop\dbs
+mongodump Output: 
+Export Command: ".\assets\bin\mongodump.exe" --db "inventory_db" --out "C:\Users\admin\Desktop\dbs"
+Export Command: "./assets/bin/mongodump.exe" --db "inventory_db" --out "C:/Users/admin/Desktop/dbs"
+Export Command: .\assets\bin\mongodump.exe" --db "inventory_db" --out "C:/Users/admin/Desktop/dbs"
+Export Command: .\assets\bin\mongodump.exe" --db "inventory_db" --out "C:UsersdminDesktopdbs"
+Export Command: .\assets\bin\mongodump.exe" --db "inventory_db" --out "C:\Users\admin\Desktop\dbs"
+Export Command: .\assets\bin\mongodump.exe" --db "inventory_db" --archive=C:UsersdminDesktopdbsinventory_db.archive
+Export Command: .\assets\bin\mongodump.exe --db inventory_db --archive=C:\Users\admin\Desktop\dbs\inventory_db.archive
+Export Command: .\assets\bin\mongodump.exe --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Export Command: .\assets\bin\mongodump.exe --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Export Command: assets\bin\mongodump.exe --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Export Command: "J:\source\PointOfSaleSystem\PointOfSaleSystem\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Export Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Export Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe" --db shdjsf --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe" --db shdjsf --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe" --db shfkg --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Import Command: J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe --db=asfef --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Import Command: J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe --db="dfkjg" --archive="C:/Users/admin/Desktop/dbs/inventory_db.archive"
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe --db="sdfg" --archive="C:/Users/admin/Desktop/dbs/inventory_db.archive"
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe" --db="dfgd" --archive="C:/Users/admin/Desktop/dbs/inventory_db.archive"
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe" --db="dfgd" --archive="C:/Users/admin/Desktop/dbs/inventory_db.archive"
+Export Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Import Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongorestore.exe" --db sfdf --archive="C:/Users/admin/Desktop/dbs/inventory_db.archive"
+Export Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db/inventory_db.archive
+Export Command: "J:\source\PointOfSaleSystem\x64\Debug\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Export Command: "J:\source\PointOfSaleSystem\x64\Release\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive
+Export Command: "J:\source\PointOfSaleSystem\x64\Release\assets\bin\mongodump.exe" --db inventory_db --archive=C:/Users/admin/Desktop/dbs/inventory_db.archive

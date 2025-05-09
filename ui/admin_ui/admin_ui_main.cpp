@@ -12,12 +12,11 @@ bool admin_window = false;
 bool showing_admin_extensions = false;
 bool log_out = false;
 
-AdminUi::ShowAdminWindow::ShowAdminWindow(AddorRemoveItemWindow& add_or_remove_item, AddorRemoveOthersWindow& add_or_remove_others, AddorRemoveAgentsWindow& add_or_remove_agents, PassWord& change_password)
+AdminUi::ShowAdminWindow::ShowAdminWindow(AddorRemoveAgentsWindow& add_or_remove_agents, PassWord& change_password, DBManagementWindow& db_management)
 {
-	this->add_or_remove_item = &add_or_remove_item;
-	this->add_or_remove_others = &add_or_remove_others;
-	this->add_or_remove_agents = &add_or_remove_agents;
-	this->change_password = &change_password;
+    this->add_or_remove_agents = &add_or_remove_agents;
+    this->change_password = &change_password;
+    this->db_management = &db_management; // Add this
 }
 
 int AdminUi::ShowAdminWindow::create_show_admin_window()
@@ -58,26 +57,6 @@ int AdminUi::ShowAdminWindow::create_show_admin_window()
 
     if (!showing_admin_extensions)
     {
-        // Products button
-        ImGui::Dummy(ImVec2(0.0f, spacing));
-        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
-        if (ImGui::Button("Products", ImVec2(button_width, button_height)))
-            this->add_or_remove_item->show_window = true;
-
-        if (this->add_or_remove_item->show_window)
-            this->add_or_remove_item->create_add_or_remove_items_window();
-
-        // Others button
-        ImGui::Dummy(ImVec2(0.0f, spacing));
-        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
-        if (ImGui::Button("Others", ImVec2(button_width, button_height)))
-            this->add_or_remove_others->show_window = true;
-
-        if (this->add_or_remove_others->show_window)
-            this->add_or_remove_others->create_add_or_remove_others_window();
-
-		ImGui::Separator();
-
         // // Agents button
         // ImGui::Dummy(ImVec2(0.0f, spacing));
         // ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
@@ -113,6 +92,15 @@ int AdminUi::ShowAdminWindow::create_show_admin_window()
         ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
         if (ImGui::Button("Regular", ImVec2(button_width, button_height)))
             regular_user_window = true;
+
+         // Database Management button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width - 5.0f) * 0.5f);
+        if (ImGui::Button("Backup The Database", ImVec2(button_width + 10.0f, button_height)))
+            this->db_management->show_window = true;
+        
+        if (this->db_management->show_window)
+            this->db_management->create_db_management_window();
 
 		ImGui::Separator();
 

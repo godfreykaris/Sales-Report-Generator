@@ -70,12 +70,6 @@
     <Filter Include="ui\ui_api\vendor\imgui\misc\fonts">
       <UniqueIdentifier>{907b12ce-e8ea-44e9-b6dd-14f848914c3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ui\admin_ui\products">
-      <UniqueIdentifier>{6923c6de-841b-47aa-9b14-b25223fe0cbc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ui\admin_ui\others">
-      <UniqueIdentifier>{11221ad1-e2fb-410f-bc4a-0481283022b0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ui\admin_ui\agents">
       <UniqueIdentifier>{0baf8e74-fa37-4c4b-b338-34489e8156ef}</UniqueIdentifier>
     </Filter>
@@ -90,6 +84,18 @@
     </Filter>
     <Filter Include="assets\fonts">
       <UniqueIdentifier>{7a270b4b-7b72-4810-bf6e-1107fa60a27e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\admin_ui\db">
+      <UniqueIdentifier>{832952dd-d368-4060-a78c-bbeee7c65134}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\bin">
+      <UniqueIdentifier>{fcf8ed42-5ac8-4293-b59b-761846e483fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\regular_ui\others">
+      <UniqueIdentifier>{84d98a6b-d716-4b96-b703-69e3279bb9ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\regular_ui\products">
+      <UniqueIdentifier>{2267f468-dedd-4e32-b7fd-fcf9ca5d6b81}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +223,9 @@
     <ClInclude Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3_loader.h">
       <Filter>ui\ui_api\vendor\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="ui\admin_ui\db\admin_ui_db_management.h">
+      <Filter>ui\admin_ui\db</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db\src\agent_sales.cpp">
@@ -283,9 +292,6 @@
       <Filter>server</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ui\admin_ui\others\admin_ui_others.cpp">
-      <Filter>ui\admin_ui\others</Filter>
-    </ClCompile>
     <ClCompile Include="ui\admin_ui\admin_ui_main.cpp">
       <Filter>ui\admin_ui</Filter>
     </ClCompile>
@@ -294,18 +300,6 @@
     </ClCompile>
     <ClCompile Include="ui\admin_ui\agents\admin_ui_remove_agents.cpp">
       <Filter>ui\admin_ui\agents</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\admin_ui\products\admin_ui_brand.cpp">
-      <Filter>ui\admin_ui\products</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\admin_ui\products\admin_ui_items.cpp">
-      <Filter>ui\admin_ui\products</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\admin_ui\products\admin_ui_product.cpp">
-      <Filter>ui\admin_ui\products</Filter>
-    </ClCompile>
-    <ClCompile Include="ui\admin_ui\products\admin_ui_quantity.cpp">
-      <Filter>ui\admin_ui\products</Filter>
     </ClCompile>
     <ClCompile Include="ui\background\background_renderer.cpp">
       <Filter>ui\background</Filter>
@@ -333,6 +327,24 @@
     </ClCompile>
     <ClCompile Include="ui\ui_api\vendor\imgui\imgui_impl_opengl3.cpp">
       <Filter>ui\ui_api\vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\admin_ui\db\admin_ui_db_management.cpp">
+      <Filter>ui\admin_ui\db</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\regular_ui\products\regular_ui_brand.cpp">
+      <Filter>ui\regular_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\regular_ui\products\regular_ui_items.cpp">
+      <Filter>ui\regular_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\regular_ui\products\regular_ui_product.cpp">
+      <Filter>ui\regular_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\regular_ui\products\regular_ui_quantity.cpp">
+      <Filter>ui\regular_ui\products</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\regular_ui\others\regular_ui_others.cpp">
+      <Filter>ui\regular_ui\others</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +426,30 @@
     </None>
     <None Include="ui\ui_api\vendor\imgui\misc\freetype\README.md">
       <Filter>ui\ui_api\vendor\imgui\misc\freetype</Filter>
+    </None>
+    <None Include="assets\bin\bsondump.exe">
+      <Filter>assets\bin</Filter>
+    </None>
+    <None Include="assets\bin\mongodump.exe">
+      <Filter>assets\bin</Filter>
+    </None>
+    <None Include="assets\bin\mongoexport.exe">
+      <Filter>assets\bin</Filter>
+    </None>
+    <None Include="assets\bin\mongofiles.exe">
+      <Filter>assets\bin</Filter>
+    </None>
+    <None Include="assets\bin\mongoimport.exe">
+      <Filter>assets\bin</Filter>
+    </None>
+    <None Include="assets\bin\mongorestore.exe">
+      <Filter>assets\bin</Filter>
+    </None>
+    <None Include="assets\bin\mongostat.exe">
+      <Filter>assets\bin</Filter>
+    </None>
+    <None Include="assets\bin\mongotop.exe">
+      <Filter>assets\bin</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

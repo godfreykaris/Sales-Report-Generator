@@ -45,10 +45,12 @@ RUserUi::Window::Window()
 
 // Constructor for ShowRegularUserWindow
 RUserUi::ShowRegularUserWindow::ShowRegularUserWindow(StockWindow& stock_win, SellWindow& sell_win,
-    ReturnSaleWindow& return_sale_win, AgentsWindow& agents_win, PassWord& change_password)
+    ReturnSaleWindow& return_sale_win, AgentsWindow& agents_win, PassWord& change_password, AddorRemoveItemWindow& add_or_remove_item, AddorRemoveOthersWindow& add_or_remove_others)
     : stock_win(stock_win), sell_win(sell_win), return_sale_win(return_sale_win),
     agents_win(agents_win), change_password(change_password)
 {
+    this->add_or_remove_item = &add_or_remove_item;
+    this->add_or_remove_others = &add_or_remove_others;
 }
 
 // Create the main regular user window with styled layout
@@ -71,7 +73,7 @@ int RUserUi::ShowRegularUserWindow::create_show_regular_user_window()
     // Center and size the window
     ImGuiIO& io = ImGui::GetIO();
     ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    ImGui::SetNextWindowSize(ImVec2(350.0f, 400.0f), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(350.0f, 470.0f), ImGuiCond_Always);
 
     // Begin window
     ImGui::Begin("Regular User Dashboard", &this->show_window, this->window_flags);
@@ -123,6 +125,27 @@ int RUserUi::ShowRegularUserWindow::create_show_regular_user_window()
     if (this->agents_win.show_window) {
         this->agents_win.create_agents_window();
     }*/
+
+    ImGui::Separator();
+
+    ImGui::Dummy(ImVec2(0.0f, spacing));
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+	if (ImGui::Button("Products", ImVec2(button_width, button_height)))
+		this->add_or_remove_item->show_window = true;
+
+	if (this->add_or_remove_item->show_window)-
+		this->add_or_remove_item->create_add_or_remove_items_window();
+
+
+	ImGui::Dummy(ImVec2(0.0f, spacing));
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+	if (ImGui::Button("Others", ImVec2(button_width, button_height)))
+		this->add_or_remove_others->show_window = true;
+
+	if (this->add_or_remove_others->show_window)
+		this->add_or_remove_others->create_add_or_remove_others_window();
+
+    ImGui::Separator();
 
     // Change Password and Log Out buttons with distinct styling
     ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(220, 75, 150, 255)); // Pink for Change Password
@@ -1787,12 +1810,7 @@ int RUserUi::SellWindow::populate_quantities(const std::string& brand)
 
 int RUserUi::SellWindow::create_sell_window()
 {
-    // Initialize combo box indices to select the first item
-    this->sell_season_current_item = 0;
-    this->sell_location_current_item = 0;
-    this->sell_age_group_current_item = 0;
-    this->sell_gender_current_item = 0;
-
+    
     // Apply modern styling without affecting data logic
     ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(40, 40, 45, 255)); // Lighter dark background
     ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(60, 60, 65, 255)); // Input background
@@ -1970,10 +1988,10 @@ int RUserUi::SellWindow::create_sell_window()
 // Initialize static members for SellWindow
 int RUserUi::SellWindow::sell_brand_current_item = 0;
 int RUserUi::SellWindow::sell_quantity_current_item = 0;
-int RUserUi::SellWindow::sell_season_current_item = 0;
-int RUserUi::SellWindow::sell_age_group_current_item = 0;
-int RUserUi::SellWindow::sell_gender_current_item = 0;
-int RUserUi::SellWindow::sell_location_current_item = 0;
+int RUserUi::SellWindow::sell_season_current_item = 1;
+int RUserUi::SellWindow::sell_age_group_current_item = 1;
+int RUserUi::SellWindow::sell_gender_current_item = 1;
+int RUserUi::SellWindow::sell_location_current_item = 1;
 bool RUserUi::SellWindow::input_error = false;
 bool RUserUi::SellWindow::success = false;
 int RUserUi::SellWindow::number_of_items = 0;
@@ -2060,6 +2078,75 @@ int RUserUi::SellWindow::notify_sale_status()
     return 1;
 }
 
+int RUserUi::Window::notify_sale_status(bool& success_flag)
+{
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(40, 40, 40, 255));
+    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(200, 200, 200, 255));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
+
+    ImGui::OpenPopup("Success");
+    ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Success", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Operation successful");
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 150.0f) * 0.5f);
+        if (ImGui::Button("OK", ImVec2(150.0f, 30.0f)))
+        {
+            success_flag = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    ImGui::PopStyleColor(2);
+    ImGui::PopStyleVar(1);
+    return 1;
+}
+
+bool RUserUi::Window::check_unwanted_characters(std::string entered_string)
+{
+    for (char c : entered_string)
+    {
+        auto iterator = std::find(this->unwanted_chars.begin(), this->unwanted_chars.end(), c);
+
+        if (iterator != this->unwanted_chars.end())
+            return true;
+    }
+
+    return false;
+}
+
+
+bool RUserUi::Window::check_for_duplicate(std::vector<std::string> items, std::string item)
+{
+    std::vector<std::string> items2;
+    items2.reserve(items.size());
+
+    std::transform(items.begin(), items.end(), std::back_inserter(items2),
+        [](const std::string& in)
+        {
+            std::string out;
+            out.reserve(in.size());
+            std::transform(in.begin(), in.end(), std::back_inserter(out), ::tolower);
+            return out;
+        });
+
+    std::transform(item.begin(), item.end(), item.begin(),
+        [](unsigned char c)
+        {
+            return std::tolower(c);
+        });
+
+    auto count = std::count(items2.begin(), items2.end(), item);
+
+    if (count > 0)
+        return true;
+
+    return false;
+}
 
 // Initialize static members for ReturnSaleWindow
 int RUserUi::ReturnSaleWindow::return_current_filter_type_index = 0;
