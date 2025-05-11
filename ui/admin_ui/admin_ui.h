@@ -162,12 +162,15 @@ namespace AdminUi
     class ShowAdminWindow : public AddorRemoveAgentsWindow, public PassWord
     {
     public:
-        ShowAdminWindow(AddorRemoveAgentsWindow& add_or_remove_agents, PassWord& change_password, DBManagementWindow& db_management);
+        ShowAdminWindow(AddorRemoveAgentsWindow& add_or_remove_agents, PassWord& change_password, DBManagementWindow& db_management, mongocxx::database db);
         ~ShowAdminWindow() = default;
 
         AddorRemoveAgentsWindow* add_or_remove_agents;
         PassWord* change_password;
         DBManagementWindow* db_management;
+
+        mongocxx::collection products; // Store products collection
+        bool show_reset_success = false; // Flag for success message
 
         bool show_window = false;
         ImGuiWindowFlags window_flags;

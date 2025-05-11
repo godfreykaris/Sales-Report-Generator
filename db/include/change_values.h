@@ -34,6 +34,9 @@ int change_product_total(mongocxx::collection products, bsoncxx::document::view 
 /*Reset the contents of the stock*/
 int reset_sales(mongocxx::collection products, SALE sale, MODE mMode);
 
+/*Reset the contents of sales data*/
+int reset_sales_data(mongocxx::collection products);
+
 /*save the sale in the sales data document*/
 int add_to_sales_details(mongocxx::collection products, SALE sale);
 

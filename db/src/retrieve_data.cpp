@@ -57,8 +57,15 @@ int get_quantity_total(mongocxx::collection products, SALE sale)
 double get_quantity_unit_cost(mongocxx::collection products, SALE sale, std::string price_type)
 {
     mproduct = products.find_one(document{} << "name" << sale.product_name << finalize);
+    if (!mproduct) {
+        throw std::runtime_error("Product not found");
+    }
     mproduct_view = mproduct.value().view();
     mcurrent_amount = mproduct_view["Brands"][sale.brand][sale.quantity][price_type];
+
+    if (!mcurrent_amount) {
+        throw std::runtime_error("Price field not found");
+    }
 
     if (mcurrent_amount.type() == bsoncxx::type::k_double)
         return mcurrent_amount.get_double();
@@ -67,7 +74,7 @@ double get_quantity_unit_cost(mongocxx::collection products, SALE sale, std::str
     else if (mcurrent_amount.type() == bsoncxx::type::k_int32)
         return (double)mcurrent_amount.get_int32();
     else
-        return 0.0;
+        throw std::runtime_error("Invalid price type");
 }
 
 int get_brand_total(mongocxx::collection products, SALE sale)
@@ -922,7 +929,7 @@ std::vector<std::vector<std::string>> get_sales_data(mongocxx::collection produc
 {
     std::vector<std::vector<std::string>> details;
     std::vector<std::string> data = {};
-    for (int count = 0; count < 10; count++)
+    for (int count = 0; count < 11; count++) // Increased to 11 to include Sale Price
         details.push_back(data);
 
     bsoncxx::stdx::optional<bsoncxx::document::value> sales_data = products.find_one(document{} << "name" << "SalesData" << finalize);
@@ -957,6 +964,9 @@ std::vector<std::vector<std::string>> get_sales_data(mongocxx::collection produc
 
         details[8].push_back(std::string(index.get_string().value));
         details[9].push_back(date_time);
+
+        double sale_price = sales_data_view[std::string(index.get_string().value)]["Sale Price"].get_double();
+        details[10].push_back(std::to_string(sale_price));
     }
 
     return details;

@@ -164,6 +164,11 @@ int display_quantity(const std::string& product, const std::string& brand, const
         static int sell_gender_current_item;
         static int sell_location_current_item;
 
+		double default_selling_price = 0.0; 
+    	double buying_price = 0.0;         
+    	double entered_sale_price = 0.0;   
+		bool prices_valid = false;
+
         static bool input_error;
         static bool success;
 
@@ -185,6 +190,31 @@ int display_quantity(const std::string& product, const std::string& brand, const
         int get_number_of_items() const;
         int handle_error(bool& err_flag);
         int notify_sale_status();
+    };
+
+	class SalesReportWindow : public Window
+    {
+    public:
+        SalesReportWindow(mongocxx::database db);
+        int create_sales_report_window();
+
+		bool show_window = false;
+        bool input_error = false;
+        bool success = false;
+
+    private:
+        mongocxx::collection products_collection;
+        std::string last_saved_file;
+       
+
+        // Date range inputs
+        struct tm start_date = {};
+        struct tm end_date = {};
+        bool date_valid = false;
+
+        // Helper functions
+        bool fetch_sales_data(std::vector<std::tuple<std::string, std::string, std::string, int, double>>& sales_data, time_t start, time_t end);
+        int handle_sales_print(const std::vector<std::tuple<std::string, std::string, std::string, int, double>>& sales_data);
     };
 
     // Agents Window for viewing agent details
@@ -713,7 +743,7 @@ int display_quantity(const std::string& product, const std::string& brand, const
     {
     public:
         ShowRegularUserWindow(StockWindow& stock_win, SellWindow& sell_win, ReturnSaleWindow& return_sale_win,
-            AgentsWindow& agents_win, PassWord& change_password, AddorRemoveItemWindow& add_or_remove_item, AddorRemoveOthersWindow& add_or_remove_others);
+            AgentsWindow& agents_win, PassWord& change_password, AddorRemoveItemWindow& add_or_remove_item, AddorRemoveOthersWindow& add_or_remove_others, SalesReportWindow& sales_report_window);
         ~ShowRegularUserWindow() = default;
 
         /* Properties */
@@ -725,7 +755,8 @@ int display_quantity(const std::string& product, const std::string& brand, const
         PassWord& change_password;
         AddorRemoveItemWindow* add_or_remove_item;
 	    AddorRemoveOthersWindow* add_or_remove_others;
-    
+		SalesReportWindow* sales_report_window;
+
         bool show_window = false;
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
 

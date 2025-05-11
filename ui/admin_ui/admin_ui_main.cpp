@@ -1,22 +1,27 @@
 #include "admin_ui.h"
 #include "imgui_internal.h"
-
 #include <algorithm>
 #include <agents.h>
 #include <marketer_ui/marketer_ui.h>
 #include "regular_ui/regular_user_ui.h"
 #include "login_ui/login_ui.h"
 #include "change_password.h"
+#include "change_values.h" 
 
 bool admin_window = false;
 bool showing_admin_extensions = false;
 bool log_out = false;
 
-AdminUi::ShowAdminWindow::ShowAdminWindow(AddorRemoveAgentsWindow& add_or_remove_agents, PassWord& change_password, DBManagementWindow& db_management)
+
+AdminUi::ShowAdminWindow::ShowAdminWindow(AddorRemoveAgentsWindow& add_or_remove_agents, 
+                                         PassWord& change_password, 
+                                         DBManagementWindow& db_management,
+                                         mongocxx::database db)
 {
     this->add_or_remove_agents = &add_or_remove_agents;
     this->change_password = &change_password;
-    this->db_management = &db_management; // Add this
+    this->db_management = &db_management;
+    this->products = db["Products"];
 }
 
 int AdminUi::ShowAdminWindow::create_show_admin_window()
@@ -36,12 +41,11 @@ int AdminUi::ShowAdminWindow::create_show_admin_window()
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5.0f, 5.0f)); // Button/input padding
 
     // Center and size the window
-    ImGuiIO& io = ImGui::GetIO();
-    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2(350.0f, 450.0f), ImGuiCond_Always); // Adjusted size for all buttons
 
     // Begin window
-	ImGui::Begin("Admin Dashboard", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Admin Dashboard", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
 
     // Title
     ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]); // Assuming large font at index 1
@@ -57,7 +61,7 @@ int AdminUi::ShowAdminWindow::create_show_admin_window()
 
     if (!showing_admin_extensions)
     {
-        // // Agents button
+        // // Agents button (commented out as in original)
         // ImGui::Dummy(ImVec2(0.0f, spacing));
         // ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
         // if (ImGui::Button("Agents", ImVec2(button_width, button_height)))
@@ -66,7 +70,6 @@ int AdminUi::ShowAdminWindow::create_show_admin_window()
         // if (this->add_or_remove_agents->show_window)
         //     this->add_or_remove_agents->create_add_or_remove_agents_window();
     }
-	
 
     if (finance_window || marketer_window || regular_user_window)
     {
@@ -93,16 +96,117 @@ int AdminUi::ShowAdminWindow::create_show_admin_window()
         if (ImGui::Button("Regular", ImVec2(button_width, button_height)))
             regular_user_window = true;
 
-         // Database Management button
+        ImGui::Separator();
+        
+        // Database Management button
         ImGui::Dummy(ImVec2(0.0f, spacing));
         ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width - 5.0f) * 0.5f);
         if (ImGui::Button("Backup The Database", ImVec2(button_width + 10.0f, button_height)))
             this->db_management->show_window = true;
-        
+
         if (this->db_management->show_window)
             this->db_management->create_db_management_window();
 
-		ImGui::Separator();
+        // Reset Sales Data button
+        ImGui::Dummy(ImVec2(0.0f, spacing));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+        if (ImGui::Button("Reset Sales Data", ImVec2(button_width, button_height)))
+        {
+            ImGui::OpenPopup("Confirm Reset Sales Data");
+        }
+
+        // Confirmation popup for resetting sales data
+        static char reset_input[32] = "";
+        bool reset_confirmed = false;
+        if (ImGui::BeginPopupModal("Confirm Reset Sales Data", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Are you sure you want to reset all sales data?");
+            ImGui::Text("This action cannot be undone.");
+            ImGui::Dummy(ImVec2(0.0f, spacing));
+            ImGui::Text("Type 'reset' in lowercase to confirm:");
+
+            ImGui::PushItemWidth(150.0f);
+            ImGui::InputText("##ResetInput", reset_input, IM_ARRAYSIZE(reset_input));
+            ImGui::PopItemWidth();
+
+            ImGui::Dummy(ImVec2(0.0f, spacing));
+
+            // Confirm button
+            ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x - 220.0f) * 0.5f);
+            if (ImGui::Button("Confirm", ImVec2(100.0f, button_height)))
+            {
+                if (strcmp(reset_input, "reset") == 0)
+                {
+                    reset_confirmed = true;
+                    ImGui::CloseCurrentPopup();
+                }
+                else
+                {
+                    ImGui::OpenPopup("Invalid Input Error");
+                }
+            }
+
+            ImGui::SameLine();
+
+            // Cancel button
+            if (ImGui::Button("Cancel", ImVec2(100.0f, button_height)))
+            {
+                reset_input[0] = '\0'; // Clear input
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+
+        // Error popup for invalid input
+        if (ImGui::BeginPopupModal("Invalid Input Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Invalid input!");
+            ImGui::Text("Please type exactly 'reset' in lowercase.");
+            if (strlen(reset_input) > 5)
+            {
+                ImGui::Text("Input is too long.");
+            }
+
+            ImGui::Dummy(ImVec2(0.0f, spacing));
+
+            ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x - 100.0f) * 0.5f);
+            if (ImGui::Button("OK", ImVec2(100.0f, button_height)))
+            {
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+
+        // Execute reset if confirmed
+        if (reset_confirmed)
+        {
+            if (reset_sales_data(products) == 1)
+            {
+                ImGui::OpenPopup("Reset Success");
+            }
+            reset_confirmed = false;
+            reset_input[0] = '\0'; // Clear input after reset
+        }
+
+        // Success popup
+        if (ImGui::BeginPopupModal("Reset Success", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::Text("Sales data reset successfully!");
+
+            ImGui::Dummy(ImVec2(0.0f, spacing));
+
+            ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x - 100.0f) * 0.5f);
+            if (ImGui::Button("OK", ImVec2(100.0f, button_height)))
+            {
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::Separator();
 
         // Change Password button (Pink)
         ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(220, 75, 150, 255)); // Pink
@@ -115,8 +219,8 @@ int AdminUi::ShowAdminWindow::create_show_admin_window()
 
         if (this->change_password->show_window)
             this->change_password->create_password_window();
-		
-		ImGui::PopStyleColor(3);
+        
+        ImGui::PopStyleColor(3);
 
         // Log Out button (Red)
         ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(220, 50, 50, 255)); // Red

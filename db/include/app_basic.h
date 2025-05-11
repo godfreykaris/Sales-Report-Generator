@@ -15,6 +15,7 @@ struct SALE
 	std::string gender = "";
 	std::string location = "";
 	int item_count = 0;
+	double sale_price = 0.0;
 };
 
 /*---------------------------------------------------------------------------------*/

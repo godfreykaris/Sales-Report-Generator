@@ -234,18 +234,21 @@ int add_to_sales_details(mongocxx::collection products, SALE sale)
     std::string t_date = get_expense_date();
     t_date = t_date.substr(0, t_date.size() - 1);
 
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Product", sale.product_name + "_" + t_date)))));
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Brand", sale.brand)))));
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Quantity", sale.quantity)))));
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Season", sale.season)))));
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Age Group", sale.age_group)))));
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Gender", sale.gender)))));
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Location", sale.location)))));
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp(path + "." + "Item Count", sale.item_count)))));
-    
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$set", make_document(kvp("current_index", current_sale_index + 1)))));
-
-    products.update_one(make_document(kvp("name", "SalesData")), make_document(kvp("$push", make_document(kvp("indices", std::to_string(current_sale_index))))));
+    // Consolidated update for all sale attributes
+    products.update_one(
+        make_document(kvp("name", "SalesData")),
+        make_document(kvp("$set", make_document(
+            kvp(path + ".Product", sale.product_name + "_" + t_date),
+            kvp(path + ".Brand", sale.brand),
+            kvp(path + ".Quantity", sale.quantity),
+            kvp(path + ".Season", sale.season),
+            kvp(path + ".Age Group", sale.age_group),
+            kvp(path + ".Gender", sale.gender),
+            kvp(path + ".Location", sale.location),
+            kvp(path + ".Item Count", sale.item_count),
+            kvp(path + ".Sale Price", sale.sale_price) // Store the final sale price
+        )), kvp("$set", make_document(kvp("current_index", current_sale_index + 1))), kvp("$push", make_document(kvp("indices", std::to_string(current_sale_index)))))
+    );
 
 
     return 1;

@@ -205,7 +205,7 @@ int insert_product_into_components(mongocxx::collection products, mongocxx::coll
 
 	/*------------------------------------------------------------------------------------*/
 
-	/*--------------------------------Set the buying prices -------------------------------*/
+	/*--------------------------------Set the buying prices Stock -------------------------------*/
 
 	set_product_brands_quantiities_price(stock, product_name, mbrands, myquantities, my_BuyingPrices, "BuyingPrice", my_numbers_of_items);
 

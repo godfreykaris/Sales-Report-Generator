@@ -21,11 +21,13 @@ namespace FUserUi
 
         double expected_expenditure = 0.0;
         double total_sales = 0.0;
+        double total_buying_prices = 0.0;
         double total_expenditure = 0.0;
         double profit_loss = 0.0;
 
         mongocxx::collection operational_costs;
         mongocxx::collection products_collection;
+        mongocxx::collection stock;
 
         bool show_window = false;
         ImGuiWindowFlags window_flags;

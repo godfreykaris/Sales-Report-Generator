@@ -330,7 +330,7 @@ int main(int, char**) {
     AdminUi::AddorRemoveAgentsWindow add_or_remove_agents_ui(add_agent_ui, remove_agent_ui);
     PassWord change_password_ui(db);
     AdminUi::DBManagementWindow db_management(db);
-    AdminUi::ShowAdminWindow admin_ui(add_or_remove_agents_ui, change_password_ui, db_management);
+    AdminUi::ShowAdminWindow admin_ui(add_or_remove_agents_ui, change_password_ui, db_management, db);
 
     FUserUi::Profit_Loss_Window profit_loss_ui(db);
     FUserUi::AddExpenseWindow add_expense_ui(db);
@@ -345,10 +345,11 @@ int main(int, char**) {
     MUserUi::CustomizedReportWindow customized_report_ui(db, window);
     MUserUi::ShowMarketerWindow marketer_ui(general_report_ui, customized_report_ui, change_password_ui);
 
+    RUserUi::SalesReportWindow sales_report_window(db);
     RUserUi::SellWindow sell_ui(db);
     RUserUi::ReturnSaleWindow return_sale_ui(db);
     RUserUi::AgentsWindow agents_ui(db);
-    RUserUi::ShowRegularUserWindow regular_user_ui(stock_ui, sell_ui, return_sale_ui, agents_ui, change_password_ui, add_or_remove_item_ui, add_or_remove_others_ui);
+    RUserUi::ShowRegularUserWindow regular_user_ui(stock_ui, sell_ui, return_sale_ui, agents_ui, change_password_ui, add_or_remove_item_ui, add_or_remove_others_ui, sales_report_window);
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {

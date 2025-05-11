@@ -21,3 +21,8 @@ double compute_total_quantity_cost(mongocxx::collection products, SALE sale, std
 *price_type: "BuyingPrice" or "SellingPrice"
 */
 double compute_total_cost(mongocxx::collection products, bsoncxx::stdx::optional<bsoncxx::document::value> components_arrays, SALE sale, std::string price_type);
+
+// Helper function to fetch buying price from Stock collection
+double get_buying_price(mongocxx::collection stock, const SALE& sale);
+// New function to compute total buying prices of sold items
+double compute_total_buying_cost(mongocxx::collection products, mongocxx::collection stock, SALE sale);

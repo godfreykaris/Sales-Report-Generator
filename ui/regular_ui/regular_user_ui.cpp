@@ -11,6 +11,8 @@
 #include <memory> // For smart pointers
 #include <algorithm> // For std::count, std::find
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <iomanip>
 #include <windows.h>
 #include <commdlg.h>
@@ -45,12 +47,13 @@ RUserUi::Window::Window()
 
 // Constructor for ShowRegularUserWindow
 RUserUi::ShowRegularUserWindow::ShowRegularUserWindow(StockWindow& stock_win, SellWindow& sell_win,
-    ReturnSaleWindow& return_sale_win, AgentsWindow& agents_win, PassWord& change_password, AddorRemoveItemWindow& add_or_remove_item, AddorRemoveOthersWindow& add_or_remove_others)
+    ReturnSaleWindow& return_sale_win, AgentsWindow& agents_win, PassWord& change_password, AddorRemoveItemWindow& add_or_remove_item, AddorRemoveOthersWindow& add_or_remove_others, SalesReportWindow& sales_report_window)
     : stock_win(stock_win), sell_win(sell_win), return_sale_win(return_sale_win),
     agents_win(agents_win), change_password(change_password)
 {
     this->add_or_remove_item = &add_or_remove_item;
     this->add_or_remove_others = &add_or_remove_others;
+    this->sales_report_window = &sales_report_window;
 }
 
 // Create the main regular user window with styled layout
@@ -144,6 +147,15 @@ int RUserUi::ShowRegularUserWindow::create_show_regular_user_window()
 
 	if (this->add_or_remove_others->show_window)
 		this->add_or_remove_others->create_add_or_remove_others_window();
+
+
+    ImGui::Dummy(ImVec2(0.0f, spacing));
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - button_width) * 0.5f);
+	if (ImGui::Button("Print Sales", ImVec2(button_width, button_height)))
+		this->sales_report_window->show_window = true;
+
+	if (this->sales_report_window->show_window)-
+		this->sales_report_window->create_sales_report_window();
 
     ImGui::Separator();
 
@@ -1518,6 +1530,8 @@ int RUserUi::StockWindow::create_stock_window()
     static bool show_failure_popup = false;
     static bool show_invalid_popup = false;
 
+    this->set_products();
+
     // Handle non-"All Products" selection
     if (this->selected_product != "All Products") {
         if (this->stock_brand_current_item == 0 && !product_changed) {
@@ -1810,7 +1824,6 @@ int RUserUi::SellWindow::populate_quantities(const std::string& brand)
 
 int RUserUi::SellWindow::create_sell_window()
 {
-    
     // Apply modern styling without affecting data logic
     ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(40, 40, 45, 255)); // Lighter dark background
     ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(60, 60, 65, 255)); // Input background
@@ -1854,30 +1867,61 @@ int RUserUi::SellWindow::create_sell_window()
     ImGui::SetCursorPosX(center_offset);
     ImGui::Text("Select Product");
     ImGui::SetCursorPosX(center_offset);
+    this->set_products();
     create_listbox_filter(this->products, "Selected", this->selected_product, '_', filter_size); // Empty label
 
     // Brand and Quantity (first row)
-    ImGui::Dummy(ImVec2(0.0f, 15.0f)); // Reduced spacing
+    ImGui::Dummy(ImVec2(0.0f, 15.0f));
     ImGui::SetCursorPosX(column_offset);
     ImGui::Text("Select Brand");
-    ImGui::SameLine(0.0f, 15.0f + filter_size.x); // Align with second column
+    ImGui::SameLine(0.0f, 15.0f + filter_size.x);
     ImGui::Text("Select Quantity");
     ImGui::SetCursorPosX(column_offset);
     if (this->selected_product != "All Products") {
         this->populate_brands(this->selected_product);
-    }
-    else {
+    } else {
         this->reset_combo_items();
         this->sell_brand_current_item = 0;
         this->sell_quantity_current_item = 0;
+        this->prices_valid = false; // Reset prices when no product is selected
+        this->default_selling_price = 0.0;
+        this->buying_price = 0.0;
+        this->entered_sale_price = 0.0;
     }
-    create_combo(this->p_brands, "##Brand", this->sell_brand_current_item, combo_size); // Empty label
+    create_combo(this->p_brands, "##Brand", this->sell_brand_current_item, combo_size);
     ImGui::SameLine(0.0f, 15.0f);
     if (this->sell_brand_current_item != 0) {
         this->get_selected_brand(this->sell_brand_current_item);
         this->populate_quantities(this->selected_product + "_" + this->selected_brand);
     }
-    create_combo(this->p_quantities, "##Quantity", this->sell_quantity_current_item, combo_size); // Empty label
+    create_combo(this->p_quantities, "##Quantity", this->sell_quantity_current_item, combo_size);
+
+    // Fetch prices only if a valid quantity is selected
+    if (this->sell_quantity_current_item != 0 && !this->get_selected_quantity(this->sell_quantity_current_item).empty()) {
+        SALE temp_sale;
+        temp_sale.product_name = this->selected_product;
+        temp_sale.brand = this->selected_product + "_" + this->selected_brand;
+        temp_sale.quantity = this->get_selected_quantity(this->sell_quantity_current_item);
+        try {
+            this->default_selling_price = get_quantity_unit_cost(this->products_collection, temp_sale, "SellingPrice");
+            this->buying_price = get_quantity_unit_cost(this->stock, temp_sale, "BuyingPrice");
+            if (this->entered_sale_price == 0.0 || !this->prices_valid) {
+                this->entered_sale_price = this->default_selling_price; // Initialize only if not set
+            }
+            this->prices_valid = true;
+        } catch (const std::runtime_error& e) {
+            this->prices_valid = false;
+            this->default_selling_price = 0.0;
+            this->buying_price = 0.0;
+            this->entered_sale_price = 0.0;
+            this->input_error = true; // Trigger error popup for failed price fetch
+        }
+    } else {
+        this->prices_valid = false;
+        this->default_selling_price = 0.0;
+        this->buying_price = 0.0;
+        this->entered_sale_price = 0.0;
+    }
 
     // Season and Age Group (second row)
     ImGui::Dummy(ImVec2(0.0f, 15.0f));
@@ -1886,9 +1930,9 @@ int RUserUi::SellWindow::create_sell_window()
     ImGui::SameLine(0.0f, 15.0f + filter_size.x);
     ImGui::Text("Age Group");
     ImGui::SetCursorPosX(column_offset);
-    create_combo(this->p_seasons, "##Season", this->sell_season_current_item, combo_size); // Empty label
+    create_combo(this->p_seasons, "##Season", this->sell_season_current_item, combo_size);
     ImGui::SameLine(0.0f, 15.0f);
-    create_combo(this->p_age_groups, "##AgeGroup", this->sell_age_group_current_item, combo_size); // Empty label
+    create_combo(this->p_age_groups, "##AgeGroup", this->sell_age_group_current_item, combo_size);
 
     // Gender and Location (third row)
     ImGui::Dummy(ImVec2(0.0f, 15.0f));
@@ -1897,9 +1941,9 @@ int RUserUi::SellWindow::create_sell_window()
     ImGui::SameLine(0.0f, 15.0f + filter_size.x);
     ImGui::Text("Location");
     ImGui::SetCursorPosX(column_offset);
-    create_combo(this->p_genders, "##Gender", this->sell_gender_current_item, combo_size); // Empty label
+    create_combo(this->p_genders, "##Gender", this->sell_gender_current_item, combo_size);
     ImGui::SameLine(0.0f, 15.0f);
-    create_combo(this->p_locations, "##Location", this->sell_location_current_item, combo_size); // Empty label
+    create_combo(this->p_locations, "##Location", this->sell_location_current_item, combo_size);
 
     // Quantity to Sell input
     ImGui::Dummy(ImVec2(0.0f, 15.0f));
@@ -1907,7 +1951,28 @@ int RUserUi::SellWindow::create_sell_window()
     ImGui::Text("Quantity to Sell");
     ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 150.0f) * 0.5f);
     ImGui::SetNextItemWidth(150.0f);
-    ImGui::InputInt("##QuantityToSell", &this->number_of_items, 1, 10); // Hidden label
+    ImGui::InputInt("##QuantityToSell", &this->number_of_items, 1, 10);
+
+    // Sale Price input (only shown if prices are valid)
+    if (this->prices_valid) {
+        ImGui::Dummy(ImVec2(0.0f, 15.0f));
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 200.0f) * 0.5f);
+        // Change text color to red if price is below minimum
+        if (this->entered_sale_price < this->buying_price) {
+            ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 80, 80, 255)); // Red text
+        }
+        ImGui::Text("Sale Price (Selling: %.2f, Buying: %.2f)", this->default_selling_price, this->buying_price);
+        if (this->entered_sale_price < this->buying_price) {
+            ImGui::PopStyleColor();
+        }
+        ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 150.0f) * 0.5f);
+        ImGui::SetNextItemWidth(150.0f);
+        ImGui::InputDouble("##SalePrice", &this->entered_sale_price, 0.0f, 0.0f, "%.2f");
+        // Clamp value to minimum during editing, but don't trigger popup
+        if (this->entered_sale_price < this->buying_price) {
+            this->entered_sale_price = this->buying_price;
+        }
+    }
 
     // Buttons
     ImGui::Dummy(ImVec2(0.0f, 15.0f));
@@ -1922,6 +1987,7 @@ int RUserUi::SellWindow::create_sell_window()
         sale.gender = this->get_selected_gender();
         sale.location = this->get_selected_location();
         sale.item_count = this->get_number_of_items();
+        sale.sale_price = this->entered_sale_price; // Use the latest entered price
 
         int available_items = 0;
         if (!sale.quantity.empty()) {
@@ -1931,10 +1997,10 @@ int RUserUi::SellWindow::create_sell_window()
         if (sale.product_name.empty() || sale.brand.empty() || sale.quantity.empty() ||
             sale.season.empty() || sale.age_group.empty() || sale.gender.empty() ||
             sale.location.empty() || sale.item_count <= 0 || available_items == 0 ||
-            sale.item_count > available_items) {
+            sale.item_count > available_items || !this->prices_valid || 
+            sale.sale_price < this->buying_price) {
             this->input_error = true;
-        }
-        else {
+        } else {
             change_amountOf_item(this->products_collection, sale, UPDATE);
             update_stock_amountOf_item(this->stock, sale, UPDATE);
             this->success = true;
@@ -1956,9 +2022,9 @@ int RUserUi::SellWindow::create_sell_window()
         this->input_error = false;
     }
     if (ImGui::BeginPopupModal("Sale Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Sale failed. Please check all inputs and ensure sufficient stock.");
-        ImGui::Dummy(ImVec2(0.0f, 10.0f)); // Add spacing
-        ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - 120.0f) * 0.5f); // Center button
+        ImGui::Text("Sale failed. Please ensure all fields are filled, sufficient stock is available, and sale price is at least %.2f.", this->buying_price);
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
+        ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - 120.0f) * 0.5f);
         if (ImGui::Button("OK", ImVec2(120, 0))) {
             ImGui::CloseCurrentPopup();
         }
@@ -1970,8 +2036,8 @@ int RUserUi::SellWindow::create_sell_window()
     }
     if (ImGui::BeginPopupModal("Sale Success", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
         ImGui::Text("Sale completed successfully!");
-        ImGui::Dummy(ImVec2(0.0f, 10.0f)); // Add spacing
-        ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - 120.0f) * 0.5f); // Center button
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
+        ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - 120.0f) * 0.5f);
         if (ImGui::Button("OK", ImVec2(120, 0))) {
             ImGui::CloseCurrentPopup();
         }
@@ -2562,6 +2628,613 @@ int RUserUi::ReturnSaleWindow::regular_user_confirm_message(int& confirm_flag)
     ImGui::PopStyleColor(9);
     ImGui::PopStyleVar(4);
     return 1;
+}
+
+
+RUserUi::SalesReportWindow::SalesReportWindow(mongocxx::database db)
+{
+    this->products_collection = db["Products"];
+
+    // Initialize dates to today
+    time_t now = time(nullptr);
+    start_date = *localtime(&now);
+    end_date = *localtime(&now);
+    start_date.tm_hour = 0;
+    start_date.tm_min = 0;
+    start_date.tm_sec = 0;
+    end_date.tm_hour = 23;
+    end_date.tm_min = 59;
+    end_date.tm_sec = 59;
+}
+int RUserUi::SalesReportWindow::create_sales_report_window()
+{
+    // Restore original dark background with modern styling
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, IM_COL32(40, 40, 45, 255)); // Restored dark background
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(60, 60, 65, 255));
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, IM_COL32(80, 80, 85, 255));
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(100, 100, 105, 255));
+    ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(50, 150, 250, 255)); // Vibrant blue for contrast
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(80, 180, 255, 255));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, IM_COL32(30, 120, 200, 255));
+    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(230, 230, 230, 255)); // Light text for dark background
+    ImGui::PushStyleColor(ImGuiCol_Separator, IM_COL32(80, 80, 85, 255));
+    ImGui::PushStyleColor(ImGuiCol_PopupBg, IM_COL32(50, 50, 55, 255)); // Slightly lighter popup background
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 12.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(20.0f, 20.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 8.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(12.0f, 8.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_PopupRounding, 8.0f);
+
+    // Responsive window size
+    ImGuiIO& io = ImGui::GetIO();
+    float window_width = (std::min)(600.0f, io.DisplaySize.x * 0.8f);
+    float window_height = 450.0f;
+    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f - window_width * 0.5f, io.DisplaySize.y * 0.5f - window_height * 0.5f), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(window_width, window_height), ImGuiCond_Always);
+
+    ImGui::Begin("Sales Report", &this->show_window, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+    // Title with larger font and gradient effect
+    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[1]);
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.45f, 0.85f, 1.0f));
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - ImGui::CalcTextSize("Sales Report Generator").x) * 0.5f);
+    ImGui::Text("Sales Report Generator");
+    ImGui::PopStyleColor();
+    ImGui::PopFont();
+    ImGui::Dummy(ImVec2(0.0f, 12.0f));
+    ImGui::Separator();
+
+    // Date range selection with grouping
+    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+    ImGui::Text("Select Date Range");
+    ImGui::Dummy(ImVec2(0.0f, 8.0f));
+
+    // Combo box arrays
+    static const char* days[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
+    static const char* months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    static const char* years[100];
+    static bool years_initialized = false;
+    if (!years_initialized) {
+        static char year_buffers[100][5];
+        for (int i = 0; i < 100; ++i) {
+            snprintf(year_buffers[i], sizeof(year_buffers[i]), "%d", 2000 + i);
+            years[i] = year_buffers[i];
+        }
+        years_initialized = true;
+    }
+
+    // Start Date
+    ImGui::BeginGroup();
+    ImGui::Text("Start Date");
+    ImGui::SetNextItemWidth(100.0f);
+    int start_day_index = start_date.tm_mday - 1;
+    if (ImGui::Combo("##StartDay", &start_day_index, days, IM_ARRAYSIZE(days))) {
+        start_date.tm_mday = start_day_index + 1;
+    }
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(120.0f);
+    if (ImGui::Combo("##StartMonth", &start_date.tm_mon, months, IM_ARRAYSIZE(months))) {
+        // Update month
+    }
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(80.0f);
+    int start_year_index = start_date.tm_year - 100;
+    if (ImGui::Combo("##StartYear", &start_year_index, years, IM_ARRAYSIZE(years))) {
+        start_date.tm_year = start_year_index + 100;
+    }
+    ImGui::EndGroup();
+
+    // End Date
+    ImGui::Dummy(ImVec2(0.0f, 12.0f));
+    ImGui::BeginGroup();
+    ImGui::Text("End Date");
+    ImGui::SetNextItemWidth(100.0f);
+    int end_day_index = end_date.tm_mday - 1;
+    if (ImGui::Combo("##EndDay", &end_day_index, days, IM_ARRAYSIZE(days))) {
+        end_date.tm_mday = end_day_index + 1;
+    }
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(120.0f);
+    if (ImGui::Combo("##EndMonth", &end_date.tm_mon, months, IM_ARRAYSIZE(months))) {
+        // Update month
+    }
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(80.0f);
+    int end_year_index = end_date.tm_year - 100;
+    if (ImGui::Combo("##EndYear", &end_year_index, years, IM_ARRAYSIZE(years))) {
+        end_date.tm_year = end_year_index + 100;
+    }
+    ImGui::EndGroup();
+
+    // Real-time date validation
+    time_t start_time = mktime(&start_date);
+    time_t end_time = mktime(&end_date);
+    date_valid = (start_time != -1 && end_time != -1 && start_time <= end_time);
+    if (!date_valid) {
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.1f, 0.1f, 1.0f));
+        ImGui::TextWrapped("Please ensure the end date is after the start date and both are valid.");
+        ImGui::PopStyleColor();
+    }
+
+    // Generate PDF button (tooltip removed)
+    ImGui::Dummy(ImVec2(0.0f, 20.0f));
+    ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 200.0f) * 0.5f);
+    ImGui::BeginDisabled(!date_valid);
+    if (ImGui::Button("Generate PDF Report", ImVec2(180.0f, 40.0f))) {
+        std::vector<std::tuple<std::string, std::string, std::string, int, double>> sales_data;
+        if (fetch_sales_data(sales_data, start_time, end_time) && !sales_data.empty()) {
+            if (handle_sales_print(sales_data)) {
+                this->success = true;
+            } else {
+                this->input_error = true;
+            }
+        } else {
+            this->input_error = true;
+        }
+    }
+    ImGui::EndDisabled();
+
+    // Help text
+    ImGui::Dummy(ImVec2(0.0f, 10.0f));
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.7f, 0.7f, 0.7f, 1.0f)); // Adjusted for dark background
+    ImGui::TextWrapped("Select a date range and click 'Generate PDF Report' to create a sales report.");
+    ImGui::PopStyleColor();
+
+    // Popups with icons
+    if (this->input_error) {
+        ImGui::OpenPopup("Report Error");
+        this->input_error = false;
+    }
+    if (ImGui::BeginPopupModal("Report Error", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.1f, 0.1f, 1.0f));
+        ImGui::Text("Error: No sales found or failed to save PDF.");
+        ImGui::PopStyleColor();
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
+        ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - 120.0f) * 0.5f);
+        if (ImGui::Button("OK", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+
+    if (this->success) {
+        ImGui::OpenPopup("Report Success");
+        this->success = false;
+    }
+    if (ImGui::BeginPopupModal("Report Success", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.1f, 0.7f, 0.1f, 1.0f));
+        ImGui::Text("Success: Report saved to %s", this->last_saved_file.c_str());
+        ImGui::PopStyleColor();
+        ImGui::TextWrapped("Open the PDF to print or review.");
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
+        ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - 250.0f) * 0.5f);
+        if (ImGui::Button("OK", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("View PDF", ImVec2(120, 0))) {
+            wchar_t file_name_w[MAX_PATH] = {0};
+            size_t converted_chars = 0;
+            mbstowcs_s(&converted_chars, file_name_w, this->last_saved_file.c_str(), MAX_PATH);
+            ShellExecute(NULL, L"open", file_name_w, NULL, NULL, SW_SHOWNORMAL);
+        }
+        ImGui::EndPopup();
+    }
+
+    ImGui::PopFont();
+    ImGui::PopStyleColor(10);
+    ImGui::PopStyleVar(7);
+    ImGui::End();
+    return 1;
+}
+
+bool RUserUi::SalesReportWindow::fetch_sales_data(std::vector<std::tuple<std::string, std::string, std::string, int, double>>& sales_data, time_t start, time_t end)
+{
+    auto all_sales = get_sales_data(this->products_collection);
+    if (all_sales.empty() || all_sales[0].empty()) {
+        return false;
+    }
+    // all_sales indices: 0=Product, 1=Brand, 2=Quantity, 3=Season, 4=Age Group, 5=Gender, 6=Location, 7=Item Count, 8=Index, 9=DateTime, 10=Sale Price
+    for (size_t i = 0; i < all_sales[0].size(); ++i) {
+        std::string date_time = all_sales[9][i]; // e.g., "Thu May 8 21:43:05 2025"
+        struct tm sale_time = {};
+        std::istringstream ss(date_time);
+        ss >> std::get_time(&sale_time, "%a %b %d %H:%M:%S %Y");
+        if (ss.fail()) {
+            continue; // Skip invalid dates
+        }
+        time_t sale_timestamp = mktime(&sale_time);
+        if (sale_timestamp == -1 || sale_timestamp < start || sale_timestamp > end) {
+            continue; // Skip sales outside date range
+        }
+        std::string product = all_sales[0][i];
+        std::string brand = all_sales[1][i];
+        std::string quantity = all_sales[2][i];
+        int item_count = std::stoi(all_sales[7][i]);
+        double sale_price = all_sales[10].empty() ? 0.0 : std::stod(all_sales[10][i]);
+        sales_data.emplace_back(product, brand, quantity, item_count, sale_price);
+    }
+    return !sales_data.empty();
+}
+int RUserUi::SalesReportWindow::handle_sales_print(const std::vector<std::tuple<std::string, std::string, std::string, int, double>>& sales_data)
+{
+    // Note: Ensure start_date and end_date are defined (e.g., as class members)
+    // struct tm start_date, end_date; // Must be initialized
+
+    OPENFILENAME ofn = { 0 };
+    wchar_t file_name[MAX_PATH] = L"sales_report.pdf";
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = GetActiveWindow();
+    ofn.lpstrFilter = L"PDF Files (*.pdf)\0*.pdf\0All Files (*.*)\0*.*\0";
+    ofn.lpstrFile = file_name;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrDefExt = L"pdf";
+    ofn.Flags = OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
+
+    if (GetSaveFileName(&ofn)) {
+        char file_name_mb[MAX_PATH] = { 0 };
+        size_t converted_chars = 0;
+        errno_t err = wcstombs_s(&converted_chars, file_name_mb, file_name, MAX_PATH);
+        if (err != 0 || converted_chars == 0) {
+            MessageBox(NULL, L"Failed to convert filename", L"Error", MB_OK | MB_ICONERROR);
+            return 0;
+        }
+
+        HPDF_Doc pdf = HPDF_New(nullptr, nullptr);
+        if (!pdf) {
+            MessageBox(NULL, L"Failed to create PDF document", L"Error", MB_OK | MB_ICONERROR);
+            return 0;
+        }
+
+        HPDF_Page page = HPDF_AddPage(pdf);
+        if (!page) {
+            MessageBox(NULL, L"Failed to create PDF page", L"Error", MB_OK | MB_ICONERROR);
+            HPDF_Free(pdf);
+            return 0;
+        }
+
+        HPDF_SetCompressionMode(pdf, HPDF_COMP_ALL);
+        HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
+
+        // Load fonts with safety checks
+        HPDF_Font title_font = HPDF_GetFont(pdf, "Helvetica-Bold", nullptr);
+        if (!title_font) title_font = HPDF_GetFont(pdf, "Times-Bold", nullptr);
+        if (!title_font) {
+            MessageBox(NULL, L"Failed to load title font", L"Error", MB_OK | MB_ICONERROR);
+            HPDF_Free(pdf);
+            return 0;
+        }
+        HPDF_Font header_font = HPDF_GetFont(pdf, "Helvetica-Bold", nullptr);
+        if (!header_font) header_font = HPDF_GetFont(pdf, "Times-Bold", nullptr);
+        if (!header_font) {
+            MessageBox(NULL, L"Failed to load header font", L"Error", MB_OK | MB_ICONERROR);
+            HPDF_Free(pdf);
+            return 0;
+        }
+        HPDF_Font data_font = HPDF_GetFont(pdf, "Helvetica", nullptr);
+        if (!data_font) data_font = HPDF_GetFont(pdf, "Times-Roman", nullptr);
+        if (!data_font) {
+            MessageBox(NULL, L"Failed to load data font", L"Error", MB_OK | MB_ICONERROR);
+            HPDF_Free(pdf);
+            return 0;
+        }
+
+        // Check for empty sales_data
+        if (sales_data.empty()) {
+            MessageBox(NULL, L"No sales data to display", L"Error", MB_OK | MB_ICONERROR);
+            HPDF_Free(pdf);
+            return 0;
+        }
+
+        // Calculate maximum lengths
+        size_t max_product_len = 20;
+        size_t max_brand_len = 20;
+        size_t max_quantity_len = 10;
+        double total_sales = 0.0;
+        for (const auto& [product, brand, quantity, item_count, sale_price] : sales_data) {
+            max_product_len = (std::max)(max_product_len, product.length());
+            max_brand_len = (std::max)(max_brand_len, brand.length());
+            max_quantity_len = (std::max)(max_quantity_len, quantity.length());
+            total_sales += item_count * sale_price;
+        }
+
+        // Cap lengths to fit A4 (~595 points, ~500 usable)
+        const float char_width = 5.5f;
+        const float max_page_width = 500.0f;
+        const size_t max_chars_per_line = static_cast<size_t>(max_page_width / char_width / 4);
+        max_product_len = (std::min)(max_product_len, max_chars_per_line);
+        max_brand_len = (std::min)(max_brand_len, max_chars_per_line);
+        max_quantity_len = (std::min)(max_quantity_len, max_chars_per_line);
+
+        // Define column widths
+        float product_width = (std::max)(35.0f, static_cast<float>(max_product_len) * char_width + 2 * 8.0f);
+        float brand_width = (std::max)(35.0f, static_cast<float>(max_brand_len) * char_width + 2 * 8.0f);
+        float quantity_width = (std::max)(40.0f, static_cast<float>(max_quantity_len) * char_width + 2 * 8.0f);
+        float item_count_width = (std::max)(40.0f, 8.0f * char_width + 2 * 8.0f);
+        float total_price_width = (std::max)(40.0f, 10.0f * char_width + 2 * 8.0f);
+        float table_width = product_width + brand_width + quantity_width + item_count_width + total_price_width;
+
+        // Cap table width to prevent overflow
+        const float max_table_width = 500.0f;
+        if (table_width > max_table_width) {
+            float scale = max_table_width / table_width;
+            product_width *= scale;
+            brand_width *= scale;
+            quantity_width *= scale;
+            item_count_width *= scale;
+            total_price_width *= scale;
+            table_width = max_table_width;
+        }
+
+        const float x_offset = 50.0f;
+        const float base_row_height = 20.0f;
+        const float line_height = 12.0f;
+        float y = HPDF_Page_GetHeight(page) - 50;
+        float table_top_y = y - 40 - 30;
+
+        // Title
+        HPDF_Page_SetFontAndSize(page, title_font, 16);
+        HPDF_Page_SetRGBFill(page, 0.0f, 0.2f, 0.4f);
+        HPDF_Page_BeginText(page);
+        const char* title = "Sales Report";
+        HPDF_Page_TextOut(page, x_offset, y, title);
+        HPDF_Page_EndText(page);
+        y -= 40;
+
+        // Date Range
+        char date_range[64];
+        char start_date_str[32];
+        char end_date_str[32];
+        strftime(start_date_str, sizeof(start_date_str), "%Y-%m-%d", &start_date);
+        strftime(end_date_str, sizeof(end_date_str), "%Y-%m-%d", &end_date);
+        snprintf(date_range, sizeof(date_range), "From %s to %s", start_date_str, end_date_str);
+        HPDF_Page_SetFontAndSize(page, data_font, 10);
+        HPDF_Page_SetRGBFill(page, 0.5f, 0.5f, 0.5f);
+        HPDF_Page_BeginText(page);
+        HPDF_Page_TextOut(page, x_offset, y, date_range);
+        HPDF_Page_EndText(page);
+        y -= 30;
+
+        // Table header (Fixed: Draw background before text)
+        HPDF_Page_SetRGBFill(page, 0.9f, 0.95f, 1.0f);
+        HPDF_Page_SetRGBStroke(page, 0.0f, 0.2f, 0.4f);
+        HPDF_Page_Rectangle(page, x_offset, y - base_row_height, table_width, base_row_height); // Adjusted y
+        HPDF_Page_FillStroke(page);
+
+        HPDF_Page_SetFontAndSize(page, header_font, 10);
+        HPDF_Page_SetRGBFill(page, 0.0f, 0.4f, 0.6f);
+        HPDF_Page_BeginText(page);
+        HPDF_Page_TextOut(page, x_offset + 8.0f, y - line_height, "Product"); // Adjusted y for text
+        HPDF_Page_TextOut(page, x_offset + product_width + 8.0f, y - line_height, "Brand");
+        HPDF_Page_TextOut(page, x_offset + product_width + brand_width + 8.0f, y - line_height, "Quantity");
+        HPDF_Page_TextOut(page, x_offset + product_width + brand_width + quantity_width + 8.0f, y - line_height, "Item Count");
+        HPDF_Page_TextOut(page, x_offset + product_width + brand_width + quantity_width + item_count_width + 8.0f, y - line_height, "Total Price");
+        HPDF_Page_EndText(page);
+        y -= base_row_height;
+
+        bool even_row = false;
+        int page_count = 1;
+        float table_bottom_y = y;
+
+        // Text splitting function
+        auto split_text = [max_chars_per_line](const std::string& text) -> std::vector<std::string> {
+            std::vector<std::string> lines;
+            if (text.empty()) {
+                lines.push_back("");
+                return lines;
+            }
+            size_t start = 0;
+            while (start < text.length()) {
+                size_t len = (std::min)(max_chars_per_line, text.length() - start);
+                if (start + len < text.length()) {
+                    while (len > 0 && text[start + len - 1] != ' ') {
+                        --len;
+                    }
+                    if (len == 0) len = max_chars_per_line;
+                }
+                lines.push_back(text.substr(start, len));
+                start += len;
+            }
+            return lines;
+        };
+
+        for (const auto& [product, brand, quantity, item_count, sale_price] : sales_data) {
+            std::string product_name = product.substr(0, product.find('_'));
+            const char* product_str = product_name.c_str();
+            const char* brand_str = brand.c_str();
+            const char* quantity_str = quantity.c_str();
+            std::vector<std::string> product_lines = split_text(product_str);
+            std::vector<std::string> brand_lines = split_text(brand_str);
+            std::vector<std::string> quantity_lines = split_text(quantity_str);
+            size_t max_lines = (std::max)((std::max)(product_lines.size(), brand_lines.size()), quantity_lines.size());
+            max_lines = (std::max)(max_lines, size_t(1));
+            max_lines = (std::min)(max_lines, size_t(3));
+            float row_height = max_lines * line_height + 8.0f;
+
+            if (y - row_height < 50) {
+                // Add page number
+                HPDF_Page_SetFontAndSize(page, data_font, 10);
+                HPDF_Page_SetRGBFill(page, 0.5f, 0.5f, 0.5f);
+                HPDF_Page_BeginText(page);
+                char page_num[32];
+                snprintf(page_num, sizeof(page_num), "Page %d", page_count);
+                HPDF_Page_TextOut(page, x_offset, 30, page_num);
+                HPDF_Page_EndText(page);
+
+                // Draw vertical lines
+                HPDF_Page_SetRGBStroke(page, 0.7f, 0.7f, 0.7f);
+                HPDF_Page_SetLineWidth(page, 0.5);
+                float x_positions[] = {
+                    x_offset,
+                    x_offset + product_width,
+                    x_offset + product_width + brand_width,
+                    x_offset + product_width + brand_width + quantity_width,
+                    x_offset + product_width + brand_width + quantity_width + item_count_width,
+                    x_offset + product_width + brand_width + quantity_width + item_count_width + total_price_width
+                };
+                for (float x : x_positions) {
+                    HPDF_Page_MoveTo(page, x, table_top_y + 5);
+                    HPDF_Page_LineTo(page, x, table_bottom_y - 5);
+                    HPDF_Page_Stroke(page);
+                }
+
+                // Start new page
+                page = HPDF_AddPage(pdf);
+                if (!page) {
+                    MessageBox(NULL, L"Failed to create new PDF page", L"Error", MB_OK | MB_ICONERROR);
+                    HPDF_Free(pdf);
+                    return 0;
+                }
+                page_count++;
+                HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
+                y = HPDF_Page_GetHeight(page) - 50;
+                table_top_y = y - 40 - 30;
+
+                // Repeat title
+                HPDF_Page_SetFontAndSize(page, title_font, 16);
+                HPDF_Page_SetRGBFill(page, 0.0f, 0.2f, 0.4f);
+                HPDF_Page_BeginText(page);
+                HPDF_Page_TextOut(page, x_offset, y, title);
+                HPDF_Page_EndText(page);
+                y -= 40;
+
+                // Repeat date range
+                HPDF_Page_SetFontAndSize(page, data_font, 10);
+                HPDF_Page_SetRGBFill(page, 0.5f, 0.5f, 0.5f);
+                HPDF_Page_BeginText(page);
+                HPDF_Page_TextOut(page, x_offset, y, date_range);
+                HPDF_Page_EndText(page);
+                y -= 30;
+
+                // Repeat table header
+                HPDF_Page_SetRGBFill(page, 0.9f, 0.95f, 1.0f);
+                HPDF_Page_SetRGBStroke(page, 0.0f, 0.2f, 0.4f);
+                HPDF_Page_Rectangle(page, x_offset, y - base_row_height, table_width, base_row_height);
+                HPDF_Page_FillStroke(page);
+
+                HPDF_Page_SetFontAndSize(page, header_font, 10);
+                HPDF_Page_SetRGBFill(page, 0.0f, 0.4f, 0.6f);
+                HPDF_Page_BeginText(page);
+                HPDF_Page_TextOut(page, x_offset + 8.0f, y - line_height, "Product");
+                HPDF_Page_TextOut(page, x_offset + product_width + 8.0f, y - line_height, "Brand");
+                HPDF_Page_TextOut(page, x_offset + product_width + brand_width + 8.0f, y - line_height, "Quantity");
+                HPDF_Page_TextOut(page, x_offset + product_width + brand_width + quantity_width + 8.0f, y - line_height, "Item Count");
+                HPDF_Page_TextOut(page, x_offset + product_width + brand_width + quantity_width + item_count_width + 8.0f, y - line_height, "Total Price");
+                HPDF_Page_EndText(page);
+                y -= base_row_height;
+                table_bottom_y = y;
+            }
+
+            // Draw row background (Fixed: Draw before text)
+            HPDF_Page_SetRGBFill(page, even_row ? 0.98f : 1.0f, even_row ? 0.98f : 1.0f, even_row ? 0.98f : 1.0f);
+            HPDF_Page_Rectangle(page, x_offset, y - row_height, table_width, row_height); // Adjusted y
+            HPDF_Page_Fill(page);
+            even_row = !even_row;
+
+            // Draw horizontal borders
+            HPDF_Page_SetRGBStroke(page, 0.7f, 0.7f, 0.7f);
+            HPDF_Page_SetLineWidth(page, 0.5);
+            HPDF_Page_MoveTo(page, x_offset, y);
+            HPDF_Page_LineTo(page, x_offset + table_width, y);
+            HPDF_Page_MoveTo(page, x_offset, y - row_height);
+            HPDF_Page_LineTo(page, x_offset + table_width, y - row_height);
+            HPDF_Page_Stroke(page);
+
+            // Print data
+            HPDF_Page_SetFontAndSize(page, data_font, 10);
+            // Product
+            HPDF_Page_SetRGBFill(page, 0.0f, 0.5f, 0.0f);
+            HPDF_Page_BeginText(page);
+            for (size_t i = 0; i < product_lines.size(); ++i) {
+                HPDF_Page_TextOut(page, x_offset + 8.0f, y - (i + 1) * line_height, product_lines[i].c_str());
+            }
+            HPDF_Page_EndText(page);
+            // Brand
+            HPDF_Page_SetRGBFill(page, 0.0f, 0.0f, 0.0f);
+            HPDF_Page_BeginText(page);
+            for (size_t i = 0; i < brand_lines.size(); ++i) {
+                HPDF_Page_TextOut(page, x_offset + product_width + 8.0f, y - (i + 1) * line_height, brand_lines[i].c_str());
+            }
+            HPDF_Page_EndText(page);
+            // Quantity
+            HPDF_Page_SetRGBFill(page, 0.0f, 0.0f, 0.0f);
+            HPDF_Page_BeginText(page);
+            for (size_t i = 0; i < quantity_lines.size(); ++i) {
+                HPDF_Page_TextOut(page, x_offset + product_width + brand_width + 8.0f, y - (i + 1) * line_height, quantity_lines[i].c_str());
+            }            
+            HPDF_Page_EndText(page);
+
+            // Item Count
+            HPDF_Page_SetRGBFill(page, 0.0f, 0.0f, 0.0f);
+            HPDF_Page_BeginText(page);
+            std::string item_count_str = std::to_string(item_count);
+            HPDF_Page_TextOut(page, x_offset + product_width + brand_width + quantity_width + 8.0f, y - line_height, item_count_str.c_str());
+            HPDF_Page_EndText(page);
+            // Total Price
+            HPDF_Page_SetRGBFill(page, 0.0f, 0.0f, 0.0f);
+            HPDF_Page_BeginText(page);
+            char total_price_str[32];
+            snprintf(total_price_str, sizeof(total_price_str), "%.2f", item_count * sale_price);
+            HPDF_Page_TextOut(page, x_offset + product_width + brand_width + quantity_width + item_count_width + 8.0f, y - line_height, total_price_str);
+            HPDF_Page_EndText(page);
+
+            y -= row_height;
+            table_bottom_y = y;
+        }
+
+        // Draw vertical lines for final page
+        HPDF_Page_SetRGBStroke(page, 0.7f, 0.7f, 0.7f);
+        HPDF_Page_SetLineWidth(page, 0.5);
+        float x_positions[] = {
+            x_offset,
+            x_offset + product_width,
+            x_offset + product_width + brand_width,
+            x_offset + product_width + brand_width + quantity_width,
+            x_offset + product_width + brand_width + quantity_width + item_count_width,
+            x_offset + product_width + brand_width + quantity_width + item_count_width + total_price_width
+        };
+        for (float x : x_positions) {
+            HPDF_Page_MoveTo(page, x, table_top_y + 5);
+            HPDF_Page_LineTo(page, x, table_bottom_y - 5);
+            HPDF_Page_Stroke(page);
+        }
+
+        // Total Sales
+        y -= 20;
+        HPDF_Page_SetFontAndSize(page, header_font, 10);
+        HPDF_Page_SetRGBFill(page, 0.0f, 0.4f, 0.6f);
+        HPDF_Page_BeginText(page);
+        char total_sales_str[64];
+        snprintf(total_sales_str, sizeof(total_sales_str), "Total Sales: %.2f", total_sales);
+        HPDF_Page_TextOut(page, x_offset + 8.0f, y, total_sales_str);
+        HPDF_Page_EndText(page);
+
+        // Final page number
+        HPDF_Page_SetFontAndSize(page, data_font, 10);
+        HPDF_Page_SetRGBFill(page, 0.5f, 0.5f, 0.5f);
+        HPDF_Page_BeginText(page);
+        char page_num[32];
+        snprintf(page_num, sizeof(page_num), "Page %d", page_count);
+        HPDF_Page_TextOut(page, x_offset, 30, page_num);
+        HPDF_Page_EndText(page);
+
+        // Save PDF
+        HPDF_STATUS error = HPDF_SaveToFile(pdf, file_name_mb);
+        if (error != HPDF_OK) {
+            wchar_t error_msg[256];
+            swprintf_s(error_msg, sizeof(error_msg) / sizeof(wchar_t), L"Failed to save PDF: Error code %u", error);
+            MessageBox(NULL, error_msg, L"Error", MB_OK | MB_ICONERROR);
+            HPDF_Free(pdf);
+            return 0;
+        }
+
+        HPDF_Free(pdf);
+        this->last_saved_file = file_name_mb; // Note: If std::wstring, convert file_name_mb
+        return 1;
+    }
+    return 0;
 }
 
 /*-----------------------------Agents Window-------------------------------*/

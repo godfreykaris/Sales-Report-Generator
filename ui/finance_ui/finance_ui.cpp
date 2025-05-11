@@ -141,6 +141,7 @@ FUserUi::Profit_Loss_Window::Profit_Loss_Window(mongocxx::database db)
 {
     this->operational_costs = db["OperationalCosts"];
     this->products_collection = db["Products"];
+    this->stock = db["Stock"];
     this->components_arrays = get_components_arrays(this->products_collection);
 }
 
@@ -178,8 +179,14 @@ int FUserUi::Profit_Loss_Window::create_profit_loss_window() {
         sale, 
         "SellingPrice"
     );
+    
+    this->total_buying_prices = compute_total_buying_cost(   this->products_collection, 
+        this->stock, 
+        sale
+    );
+
     this->total_expenditure = get_operational_costs_total(this->operational_costs);
-    this->profit_loss = this->total_sales - this->total_expenditure;
+    this->profit_loss = this->total_sales - (this->total_buying_prices + this->total_expenditure);
 
     // Define uniform starting positions for labels and values
     const float label_width = 220.0f; // Fixed width for labels to ensure uniform alignment
@@ -200,6 +207,14 @@ int FUserUi::Profit_Loss_Window::create_profit_loss_window() {
     ImGui::SameLine();
     ImGui::SetCursorPosX(value_start);
     ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.0f, 1.0f), "%s", this->truncate(this->total_sales).c_str());
+    ImGui::Separator();
+
+    ImGui::Dummy(ImVec2(0.0f, 10.0f));
+    ImGui::SetCursorPosX(20.0f);
+    ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.4f, 0.7f), "Total Buying Prices:"); // Faint Red
+    ImGui::SameLine();
+    ImGui::SetCursorPosX(value_start);
+    ImGui::TextColored(ImVec4(1.0f, 0.4f, 0.4f, 1.0f), "%s", this->truncate(this->total_buying_prices).c_str());
     ImGui::Separator();
 
     ImGui::Dummy(ImVec2(0.0f, 10.0f));
@@ -697,7 +712,7 @@ FUserUi::ConfirmSaleWindow::ConfirmSaleWindow(mongocxx::database db, RUserUi::Wi
     this->agents = db["Agents"];
     this->agent_sales = db["AgentSales"];
     this->products_collection = db["Products"];
-    this->stock = db["stock"];
+    this->stock = db["Stock"];
     this->p_window = &window;
     this->selected_agent = "All Agents";
     this->table_flags = ImGuiTableFlags_BordersV | ImGuiTableFlags_BordersOuterH | ImGuiTableFlags_RowBg;
